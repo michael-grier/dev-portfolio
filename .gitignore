@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# production
+build/
+dist/
+
+# local env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# editor/system
+.DS_Store
+.idea/
+.vscode/
+
+# local design/reference assets
+hero.mp4
+navigation.mp4
+video-analysis/
+
+# generated reports
+playwright-report/
+test-results/
+coverage/
