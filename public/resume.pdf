@@ -1,0 +1,109 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1720 >>
+stream
+BT
+/F1 24 Tf
+72 760 Td
+(Michael Grier) Tj
+-72 -34 Td
+/F1 14 Tf
+72 726 Td
+(Software Developer) Tj
+-72 -34 Td
+/F1 11 Tf
+72 692 Td
+(Portfolio resume placeholder) Tj
+-72 -22 Td
+/F1 14 Tf
+72 670 Td
+(Summary) Tj
+-72 -22 Td
+/F1 10 Tf
+72 648 Td
+(Product-minded software developer focused on polished React interfaces, typed application architecture, and dependable delivery habits.) Tj
+-72 -16 Td
+/F1 10 Tf
+72 632 Td
+(Strong fit for teams that need someone comfortable moving between UI details, data flow, API contracts, and pragmatic shipping tradeoffs.) Tj
+-72 -28 Td
+/F1 14 Tf
+72 604 Td
+(Technical Focus) Tj
+-72 -22 Td
+/F1 10 Tf
+72 582 Td
+(- Frontend: React, Next.js, TypeScript, Tailwind CSS) Tj
+-72 -16 Td
+/F1 10 Tf
+72 566 Td
+(- Backend: Node.js, API design, databases, auth) Tj
+-72 -16 Td
+/F1 10 Tf
+72 550 Td
+(- Delivery: testing, accessibility, performance, product thinking) Tj
+-72 -28 Td
+/F1 14 Tf
+72 522 Td
+(Recent Work) Tj
+-72 -22 Td
+/F1 11 Tf
+72 500 Td
+(Software Developer - Independent projects - 2025 to Present) Tj
+-72 -18 Td
+/F1 10 Tf
+72 482 Td
+(- Built portfolio-ready full-stack web projects with modern React, Next.js, typed APIs, and deployment-focused practices.) Tj
+-72 -16 Td
+/F1 10 Tf
+72 466 Td
+(- Designed reusable interface patterns for dashboards, content-heavy pages, and workflow tools.) Tj
+-72 -16 Td
+/F1 10 Tf
+72 450 Td
+(- Implemented responsive layouts, animation systems, and component states across mobile and desktop breakpoints.) Tj
+-72 -28 Td
+/F1 14 Tf
+72 422 Td
+(Contact) Tj
+-72 -22 Td
+/F1 10 Tf
+72 400 Td
+(Email: hello@example.com) Tj
+-72 -16 Td
+/F1 10 Tf
+72 384 Td
+(GitHub: github.com/michael-grier) Tj
+-72 -16 Td
+/F1 10 Tf
+72 368 Td
+(LinkedIn: linkedin.com/in/example) Tj
+-72 -16 Td
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2082
+%%EOF
