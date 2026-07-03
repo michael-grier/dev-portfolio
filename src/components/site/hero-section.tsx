@@ -36,7 +36,11 @@ export function HeroSection() {
             </Badge>
           </motion.div>
 
-          <h1 className="text-balance text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-7xl">
+          <h1 className="sr-only">{siteConfig.headline}</h1>
+          <div
+            aria-hidden="true"
+            className="text-balance text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-7xl"
+          >
             {heroLines.map((line, index) => (
               <motion.span
                 key={line}
@@ -52,7 +56,7 @@ export function HeroSection() {
                 {line}
               </motion.span>
             ))}
-          </h1>
+          </div>
 
           <motion.p
             initial={initial}

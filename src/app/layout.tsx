@@ -64,8 +64,20 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
     >
       <body className="min-h-full overflow-x-hidden bg-background text-foreground">
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-950 shadow-2xl shadow-sky-950/30 outline-none focus:not-sr-only focus:ring-2 focus:ring-sky-300"
+        >
+          Skip to content
+        </a>
         <SiteNavigation />
-        <main className="relative flex min-h-screen flex-col">{children}</main>
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="relative flex min-h-screen flex-col outline-none"
+        >
+          {children}
+        </main>
         <SiteFooter />
       </body>
     </html>

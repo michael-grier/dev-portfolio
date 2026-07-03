@@ -23,6 +23,7 @@ export function SiteNavigation() {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const [isContactPanelOpen, setIsContactPanelOpen] = useState(false);
+  const contactPanelId = "site-contact-panel";
 
   const handleDesktopBlur = (event: FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -60,12 +61,16 @@ export function SiteNavigation() {
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
+                  aria-controls={opensContactPanel ? contactPanelId : undefined}
+                  aria-expanded={
+                    opensContactPanel ? isContactPanelOpen : undefined
+                  }
                   onPointerEnter={
                     opensContactPanel
                       ? () => setIsContactPanelOpen(true)
                       : undefined
                   }
-                  onFocus={
+                  onFocusCapture={
                     opensContactPanel
                       ? () => setIsContactPanelOpen(true)
                       : undefined
@@ -86,7 +91,10 @@ export function SiteNavigation() {
         <AnimatePresence>
           {isContactPanelOpen ? (
             <motion.div
+              id={contactPanelId}
               key="contact-panel"
+              role="region"
+              aria-label="Contact options"
               initial={shouldReduceMotion ? false : { opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.98 }}
