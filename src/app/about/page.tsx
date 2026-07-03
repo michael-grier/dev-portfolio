@@ -7,6 +7,8 @@ import { aboutPrinciples, siteConfig, workingStyle } from "@/content/site";
 
 export const metadata = {
   title: "About",
+  description:
+    "Background, working style, and product engineering principles for software developer Michael Grier.",
 };
 
 export default function AboutPage() {

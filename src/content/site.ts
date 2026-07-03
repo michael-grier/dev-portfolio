@@ -47,6 +47,7 @@ export type ExperienceRole = {
 export const siteConfig = {
   name: "Michael Grier",
   role: "Software Developer",
+  url: "https://michaelgrier.dev",
   headline: "I build sharp, resilient web products with full-stack care.",
   shortIntro:
     "A portfolio for recent software projects, resume details, and practical ways to get in touch.",

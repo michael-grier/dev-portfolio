@@ -7,6 +7,8 @@ import { contactLinks, siteConfig } from "@/content/site";
 
 export const metadata = {
   title: "Contact",
+  description:
+    "Contact links and availability details for software developer Michael Grier.",
 };
 
 export default function ContactPage() {

@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Projects",
+  description:
+    "Selected software development projects with product context, technical notes, and implementation details.",
 };
 
 const mediaStyles: Record<

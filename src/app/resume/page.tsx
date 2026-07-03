@@ -16,6 +16,8 @@ import {
 
 export const metadata = {
   title: "Resume",
+  description:
+    "Resume details, experience summary, skills, and downloadable PDF for software developer Michael Grier.",
 };
 
 export default function ResumePage() {
