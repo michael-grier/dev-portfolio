@@ -29,5 +29,5 @@ Initial planned checkpoints:
 
 ## Requirements
 
-- Bun
+- Bun 1.3 or newer
 - Node.js 20.9 or newer
