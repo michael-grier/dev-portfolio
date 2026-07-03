@@ -41,6 +41,12 @@ export const siteConfig = {
   availability: "Open to software development opportunities",
 };
 
+export const heroLines = [
+  "I build sharp,",
+  "resilient web products",
+  "with full-stack care.",
+];
+
 export const navItems: NavItem[] = [
   { label: "Home", href: "/", icon: Home },
   { label: "Resume", href: "/resume", icon: FileText },
