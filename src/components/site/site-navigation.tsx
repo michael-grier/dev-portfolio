@@ -24,6 +24,9 @@ export function SiteNavigation() {
   const shouldReduceMotion = useReducedMotion();
   const [isContactPanelOpen, setIsContactPanelOpen] = useState(false);
   const contactPanelId = "site-contact-panel";
+  const isHomePage = pathname === "/";
+  const desktopRevealDelay = shouldReduceMotion ? 0 : isHomePage ? 1.5 : 0.62;
+  const mobileRevealDelay = shouldReduceMotion ? 0 : isHomePage ? 1.4 : 0.42;
 
   const handleDesktopBlur = (event: FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -36,7 +39,7 @@ export function SiteNavigation() {
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -18, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.72, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.72, delay: desktopRevealDelay, ease: [0.16, 1, 0.3, 1] }}
         className="pointer-events-auto relative hidden md:block"
         onPointerLeave={() => setIsContactPanelOpen(false)}
         onBlur={handleDesktopBlur}
@@ -148,7 +151,7 @@ export function SiteNavigation() {
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -16, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.62, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.62, delay: mobileRevealDelay, ease: [0.16, 1, 0.3, 1] }}
         className="pointer-events-auto flex w-full max-w-sm items-center justify-between rounded-full border border-white/15 bg-white/12 px-2 py-2 text-white shadow-2xl shadow-sky-950/30 backdrop-blur-2xl md:hidden"
       >
         <Link

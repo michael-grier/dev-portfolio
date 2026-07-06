@@ -14,7 +14,10 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
+  const contentDelay = shouldReduceMotion ? 0 : 1.28;
   const initial = shouldReduceMotion ? false : { opacity: 0, y: 18 };
+  const lineInitial = shouldReduceMotion ? false : { opacity: 0, y: 22 };
+  const cardInitial = shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 };
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-10">
@@ -28,7 +31,7 @@ export function HeroSection() {
           <motion.div
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.18, ease: easeOut }}
+            transition={{ duration: 0.68, delay: contentDelay, ease: easeOut }}
           >
             <Badge className="mb-6 border-white/14 bg-white/10 text-sky-100 hover:bg-white/10">
               <Sparkles className="size-3" />
@@ -45,11 +48,11 @@ export function HeroSection() {
               <motion.span
                 key={line}
                 className="block"
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 24, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={lineInitial}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.82,
-                  delay: 0.34 + index * 0.16,
+                  duration: 0.78,
+                  delay: contentDelay + 0.12 + index * 0.13,
                   ease: easeOut,
                 }}
               >
@@ -61,7 +64,7 @@ export function HeroSection() {
           <motion.p
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.74, delay: 0.92, ease: easeOut }}
+            transition={{ duration: 0.72, delay: contentDelay + 0.68, ease: easeOut }}
             className="mt-6 max-w-2xl text-pretty text-base leading-7 text-white/66 sm:text-lg"
           >
             {siteConfig.shortIntro}
@@ -70,7 +73,7 @@ export function HeroSection() {
           <motion.div
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.74, delay: 1.08, ease: easeOut }}
+            transition={{ duration: 0.72, delay: contentDelay + 0.82, ease: easeOut }}
             className="mt-8 flex flex-col gap-3 sm:flex-row"
           >
             <Button
@@ -98,9 +101,9 @@ export function HeroSection() {
         </div>
 
         <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 28, scale: 0.96 }}
+          initial={cardInitial}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, delay: 1.16, ease: easeOut }}
+          transition={{ duration: 0.86, delay: contentDelay + 0.74, ease: easeOut }}
         >
           <Card className="border-white/12 bg-white/[0.07] text-white shadow-2xl shadow-sky-950/30 backdrop-blur-2xl">
             <CardContent className="grid gap-6 p-5 sm:p-6">
