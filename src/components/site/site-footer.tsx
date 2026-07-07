@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
-import { contactLinks, navItems, siteConfig } from "@/content/site";
+import { contactLinks, heroHeadline, navItems, siteConfig } from "@/content/site";
 
 export function SiteFooter() {
   const pathname = usePathname();
@@ -24,7 +24,7 @@ export function SiteFooter() {
             {siteConfig.name}
           </Link>
           <p className="mt-3 text-sm leading-6 text-white/56">
-            {siteConfig.headline}
+            {heroHeadline}
           </p>
           <p className="mt-4 text-xs uppercase tracking-[0.18em] text-sky-200/62">
             {siteConfig.location} / {siteConfig.availability}
