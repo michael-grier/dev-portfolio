@@ -1,9 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
 import { contactLinks, navItems, siteConfig } from "@/content/site";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+
+  if (pathname === "/") {
+    return null;
+  }
+
   return (
     <footer className="border-t border-white/10 bg-background/72 px-5 py-10 text-white backdrop-blur-xl sm:px-8 lg:px-10">
       <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-[1fr_auto_auto] md:items-start">

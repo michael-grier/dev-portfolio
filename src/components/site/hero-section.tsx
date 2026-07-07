@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { featuredProjects, heroLines, siteConfig, skillGroups } from "@/content/site";
+import { heroLines, siteConfig, skillGroups } from "@/content/site";
 import { HeroLightfieldCanvas } from "@/components/site/hero-lightfield-canvas";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -20,20 +20,20 @@ export function HeroSection() {
   const cardInitial = shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 };
 
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-10">
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden px-5 py-[clamp(6rem,10vh,7.5rem)] sm:px-8 lg:px-10">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(14,165,233,0.22),transparent_20rem)]" />
       <HeroLightfieldCanvas className="opacity-95" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.2),rgba(2,6,23,0.05)_38%,rgba(2,6,23,0.55)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div className="max-w-3xl">
           <motion.div
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.68, delay: contentDelay, ease: easeOut }}
           >
-            <Badge className="mb-6 border-white/14 bg-white/10 text-sky-100 hover:bg-white/10">
+            <Badge className="mb-5 border-white/14 bg-white/10 text-sky-100 hover:bg-white/10">
               <Sparkles className="size-3" />
               {siteConfig.availability}
             </Badge>
@@ -42,7 +42,7 @@ export function HeroSection() {
           <h1 className="sr-only">{siteConfig.headline}</h1>
           <div
             aria-hidden="true"
-            className="text-balance text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-7xl"
+            className="text-balance text-5xl font-semibold leading-[0.96] text-white sm:text-6xl lg:text-[clamp(4rem,5.8vw,4.5rem)]"
           >
             {heroLines.map((line, index) => (
               <motion.span
@@ -65,7 +65,7 @@ export function HeroSection() {
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, delay: contentDelay + 0.68, ease: easeOut }}
-            className="mt-6 max-w-2xl text-pretty text-base leading-7 text-white/66 sm:text-lg"
+            className="mt-5 max-w-2xl text-pretty text-base leading-7 text-white/66 sm:text-lg"
           >
             {siteConfig.shortIntro}
           </motion.p>
@@ -74,7 +74,7 @@ export function HeroSection() {
             initial={initial}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, delay: contentDelay + 0.82, ease: easeOut }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row"
+            className="mt-6 flex flex-col gap-3 sm:flex-row"
           >
             <Button
               asChild
@@ -129,23 +129,6 @@ export function HeroSection() {
                       {group.skills.join(" / ")}
                     </p>
                   </div>
-                ))}
-              </div>
-              <div className="grid gap-3 border-t border-white/10 pt-5">
-                {featuredProjects.slice(0, 2).map((project) => (
-                  <Link
-                    key={project.title}
-                    href="/projects"
-                    className="group rounded-2xl border border-white/10 bg-white/[0.04] p-4 outline-none transition hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-sky-300"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <p className="font-medium text-white">{project.title}</p>
-                      <ArrowRight className="size-4 text-white/40 transition group-hover:translate-x-0.5 group-hover:text-white" />
-                    </div>
-                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-white/56">
-                      {project.summary}
-                    </p>
-                  </Link>
                 ))}
               </div>
             </CardContent>
