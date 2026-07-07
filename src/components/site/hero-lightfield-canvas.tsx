@@ -64,8 +64,19 @@ const BURST_ANGLES = [
   1.18, 1.36, 1.54, 1.72, 1.9, 2.08, 2.24, 2.42, 2.68,
 ];
 
+const LIVE_RAY_INDEXES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+const GLINT_RAY_INDEXES = [2, 6, 10, 14, 18, 22];
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function wrapProgress(value: number) {
+  return value - Math.floor(value);
+}
+
+function triangleWave(value: number) {
+  return 1 - Math.abs(wrapProgress(value) * 2 - 1);
 }
 
 function easeOutCubic(value: number) {
@@ -133,7 +144,7 @@ function drawTaperedRay(
     length,
     endWidth,
     alpha,
-    apexOffset = 7,
+    apexOffset = 2,
     apexWidth = 0.9,
     shadowBlur = 0,
   }: TaperedRayOptions
@@ -225,6 +236,190 @@ function drawSweepRays(context: CanvasRenderingContext2D, layer: LightfieldLayer
   });
 }
 
+function drawLiveRay(
+  context: CanvasRenderingContext2D,
+  focalX: number,
+  focalY: number,
+  diagonal: number,
+  angle: number,
+  length: number,
+  endWidth: number,
+  alpha: number,
+  bandProgress: number
+) {
+  const directionX = Math.cos(angle);
+  const directionY = Math.sin(angle);
+  const normalX = -directionY;
+  const normalY = directionX;
+  const apexOffset = 1.5;
+  const apexWidth = 0.5;
+  const startX = focalX + directionX * apexOffset;
+  const startY = focalY + directionY * apexOffset;
+  const endX = focalX + directionX * diagonal * length;
+  const endY = focalY + directionY * diagonal * length;
+  const startHalfWidth = apexWidth / 2;
+  const endHalfWidth = endWidth / 2;
+  const gradient = context.createLinearGradient(startX, startY, endX, endY);
+
+  gradient.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.62})`);
+  gradient.addColorStop(0.1, `rgba(224, 244, 255, ${alpha})`);
+  gradient.addColorStop(0.32, `rgba(125, 211, 252, ${alpha * 0.5})`);
+  gradient.addColorStop(0.72, `rgba(14, 165, 233, ${alpha * 0.16})`);
+  gradient.addColorStop(1, "rgba(2, 6, 23, 0)");
+
+  context.save();
+  context.globalCompositeOperation = "screen";
+  context.beginPath();
+  context.moveTo(startX + normalX * startHalfWidth, startY + normalY * startHalfWidth);
+  context.lineTo(endX + normalX * endHalfWidth, endY + normalY * endHalfWidth);
+  context.lineTo(endX - normalX * endHalfWidth, endY - normalY * endHalfWidth);
+  context.lineTo(startX - normalX * startHalfWidth, startY - normalY * startHalfWidth);
+  context.closePath();
+  context.fillStyle = gradient;
+  context.fill();
+
+  const bandStart = clamp(bandProgress - 0.075, 0.02, 0.94);
+  const bandEnd = clamp(bandProgress + 0.13, 0.06, 0.98);
+  const bandStartWidth = apexWidth + (endWidth - apexWidth) * bandStart;
+  const bandEndWidth = apexWidth + (endWidth - apexWidth) * bandEnd;
+  const bandStartX = focalX + directionX * diagonal * length * bandStart;
+  const bandStartY = focalY + directionY * diagonal * length * bandStart;
+  const bandEndX = focalX + directionX * diagonal * length * bandEnd;
+  const bandEndY = focalY + directionY * diagonal * length * bandEnd;
+  const bandGradient = context.createLinearGradient(
+    bandStartX,
+    bandStartY,
+    bandEndX,
+    bandEndY
+  );
+  const bandAlpha = clamp(alpha * 1.9, 0, 0.42);
+
+  bandGradient.addColorStop(0, "rgba(125, 211, 252, 0)");
+  bandGradient.addColorStop(0.46, `rgba(245, 251, 255, ${bandAlpha})`);
+  bandGradient.addColorStop(1, "rgba(125, 211, 252, 0)");
+
+  context.shadowColor = `rgba(125, 211, 252, ${bandAlpha * 0.62})`;
+  context.shadowBlur = 10;
+  context.beginPath();
+  context.moveTo(
+    bandStartX + normalX * (bandStartWidth / 2),
+    bandStartY + normalY * (bandStartWidth / 2)
+  );
+  context.lineTo(
+    bandEndX + normalX * (bandEndWidth / 2),
+    bandEndY + normalY * (bandEndWidth / 2)
+  );
+  context.lineTo(
+    bandEndX - normalX * (bandEndWidth / 2),
+    bandEndY - normalY * (bandEndWidth / 2)
+  );
+  context.lineTo(
+    bandStartX - normalX * (bandStartWidth / 2),
+    bandStartY - normalY * (bandStartWidth / 2)
+  );
+  context.closePath();
+  context.fillStyle = bandGradient;
+  context.fill();
+  context.restore();
+}
+
+function drawLiveRays(
+  context: CanvasRenderingContext2D,
+  layer: LightfieldLayer,
+  focalX: number,
+  focalY: number,
+  time: number,
+  motionRamp: number
+) {
+  const widthScale = layer.width > 700 ? 22 : 14;
+
+  LIVE_RAY_INDEXES.forEach((streakIndex, liveIndex) => {
+    const streak = STREAKS[streakIndex];
+    const angularSweep =
+      Math.sin(time * (0.00042 + streak.speed * 0.0002) + liveIndex * 0.82) * 0.052;
+    const fineSweep = Math.sin(time * 0.00024 + liveIndex * 1.31) * 0.018;
+    const widthPulse =
+      1 + Math.sin(time * (0.0009 + streak.speed * 0.00072) + liveIndex * 1.17) * 0.34;
+    const brightnessPulse =
+      0.74 + Math.sin(time * (0.00155 + streak.speed * 0.0005) + liveIndex) * 0.26;
+    const bandProgress =
+      0.11 + wrapProgress(time * 0.00009 * (1.55 + streak.speed) + liveIndex * 0.11) * 0.78;
+
+    drawLiveRay(
+      context,
+      focalX,
+      focalY,
+      layer.diagonal,
+      streak.angle + angularSweep + fineSweep,
+      streak.length * (0.98 + Math.sin(time * 0.0003 + liveIndex) * 0.035),
+      streak.width * widthScale * widthPulse,
+      streak.alpha * 0.42 * brightnessPulse * motionRamp,
+      bandProgress
+    );
+  });
+}
+
+function drawGlints(
+  context: CanvasRenderingContext2D,
+  layer: LightfieldLayer,
+  focalX: number,
+  focalY: number,
+  time: number,
+  motionRamp: number
+) {
+  context.save();
+  context.globalCompositeOperation = "screen";
+
+  GLINT_RAY_INDEXES.forEach((streakIndex, glintIndex) => {
+    const streak = STREAKS[streakIndex];
+    const cycle = wrapProgress(time * 0.000045 * (1.2 + streak.speed) + glintIndex * 0.19);
+    const flash = Math.pow(triangleWave(cycle), 8) * motionRamp;
+
+    if (flash < 0.08) {
+      return;
+    }
+
+    const angle =
+      streak.angle +
+      Math.sin(time * 0.00034 + glintIndex * 1.4) * 0.038 +
+      Math.cos(time * 0.00021 + glintIndex) * 0.014;
+    const directionX = Math.cos(angle);
+    const directionY = Math.sin(angle);
+    const normalX = -directionY;
+    const normalY = directionX;
+    const travel = 0.2 + cycle * 0.62;
+    const glintLength = layer.diagonal * 0.1;
+    const centerX = focalX + directionX * layer.diagonal * streak.length * travel;
+    const centerY = focalY + directionY * layer.diagonal * streak.length * travel;
+    const startX = centerX - directionX * glintLength * 0.42;
+    const startY = centerY - directionY * glintLength * 0.42;
+    const endX = centerX + directionX * glintLength * 0.58;
+    const endY = centerY + directionY * glintLength * 0.58;
+    const width = streak.width * (layer.width > 700 ? 13 : 8) * (0.8 + flash * 0.5);
+    const gradient = context.createLinearGradient(startX, startY, endX, endY);
+    const alpha = clamp(streak.alpha * flash * 1.8, 0, 0.52);
+
+    gradient.addColorStop(0, "rgba(125, 211, 252, 0)");
+    gradient.addColorStop(0.48, `rgba(255, 255, 255, ${alpha})`);
+    gradient.addColorStop(1, "rgba(125, 211, 252, 0)");
+
+    context.save();
+    context.shadowColor = `rgba(224, 244, 255, ${alpha * 0.62})`;
+    context.shadowBlur = 14;
+    context.beginPath();
+    context.moveTo(startX + normalX * width, startY + normalY * width);
+    context.lineTo(endX + normalX * width * 0.62, endY + normalY * width * 0.62);
+    context.lineTo(endX - normalX * width * 0.62, endY - normalY * width * 0.62);
+    context.lineTo(startX - normalX * width, startY - normalY * width);
+    context.closePath();
+    context.fillStyle = gradient;
+    context.fill();
+    context.restore();
+  });
+
+  context.restore();
+}
+
 function drawBurstRays(context: CanvasRenderingContext2D, layer: LightfieldLayer) {
   const { focalX, focalY, diagonal, width, height } = layer;
   const bloom = context.createRadialGradient(
@@ -257,7 +452,7 @@ function drawBurstRays(context: CanvasRenderingContext2D, layer: LightfieldLayer
       length: 1.12,
       endWidth,
       alpha: alpha * 0.82,
-      apexOffset: 10,
+      apexOffset: 3,
       apexWidth: broadRay ? 1.6 : 0.8,
       shadowBlur: broadRay ? 18 : 8,
     });
@@ -266,7 +461,7 @@ function drawBurstRays(context: CanvasRenderingContext2D, layer: LightfieldLayer
       length: 1.08,
       endWidth: endWidth * 0.24,
       alpha: alpha * 0.92,
-      apexOffset: 8,
+      apexOffset: 2,
       apexWidth: 0.4,
     });
   });
@@ -279,14 +474,26 @@ function drawFocalBloom(
   width: number,
   height: number,
   diagonal: number,
-  pulse: number
+  pulse: number,
+  time: number,
+  reducedMotion: boolean
 ) {
+  const stretch = reducedMotion ? 1 : 1.08 + Math.sin(time * 0.00052) * 0.08;
+  const squeeze = reducedMotion ? 1 : 0.9 + Math.cos(time * 0.00047) * 0.06;
+  const rotation = reducedMotion ? 0 : Math.sin(time * 0.00031) * 0.18;
+
+  context.save();
+  context.globalCompositeOperation = "source-over";
+  context.translate(focalX, focalY);
+  context.rotate(rotation);
+  context.scale(stretch, squeeze);
+
   const bloom = context.createRadialGradient(
-    focalX,
-    focalY,
     0,
-    focalX,
-    focalY,
+    0,
+    0,
+    0,
+    0,
     diagonal * 0.42
   );
 
@@ -295,8 +502,18 @@ function drawFocalBloom(
   bloom.addColorStop(0.34, "rgba(14, 165, 233, 0.07)");
   bloom.addColorStop(1, "rgba(2, 6, 23, 0)");
 
-  context.globalCompositeOperation = "source-over";
   context.fillStyle = bloom;
+  context.fillRect(-diagonal, -diagonal, diagonal * 2, diagonal * 2);
+  context.restore();
+
+  const core = context.createRadialGradient(focalX, focalY, 0, focalX, focalY, diagonal * 0.08);
+
+  core.addColorStop(0, `rgba(255, 255, 255, ${0.16 + pulse * 0.12})`);
+  core.addColorStop(0.34, `rgba(125, 211, 252, ${0.1 + pulse * 0.08})`);
+  core.addColorStop(1, "rgba(2, 6, 23, 0)");
+
+  context.globalCompositeOperation = "screen";
+  context.fillStyle = core;
   context.fillRect(0, 0, width, height);
 }
 
@@ -322,43 +539,65 @@ function drawLayer(
 
 function drawLightfield(
   context: CanvasRenderingContext2D,
-  baseLayer: LightfieldLayer,
-  sweepLayer: LightfieldLayer,
+  baseLayer: LightfieldLayer | null,
+  sweepLayer: LightfieldLayer | null,
   burstLayer: LightfieldLayer,
   time: number,
   reducedMotion: boolean
 ) {
-  const { width, height, diagonal } = baseLayer;
-  const driftX = reducedMotion ? 0 : Math.sin(time * 0.00036) * 34;
-  const driftY = reducedMotion ? 0 : Math.cos(time * 0.00042) * 24;
-  const focalX = baseLayer.focalX + driftX;
-  const focalY = baseLayer.focalY + driftY;
+  const sceneLayer = baseLayer ?? burstLayer;
+  const { width, height, diagonal } = sceneLayer;
+  const driftX = reducedMotion ? 0 : Math.sin(time * 0.0002754) * 34;
+  const driftY = reducedMotion ? 0 : Math.cos(time * 0.0003213) * 24;
+  const focalX = sceneLayer.focalX + driftX;
+  const focalY = sceneLayer.focalY + driftY;
   const pulse = reducedMotion ? 0.62 : 0.56 + Math.sin(time * 0.0017) * 0.26;
-  const ambientAlpha = reducedMotion ? 0.78 : 0.72 + Math.sin(time * 0.00135) * 0.14;
+  const layerBreath = reducedMotion ? 0 : Math.sin(time * 0.00072) * 0.16;
+  const ambientAlpha = reducedMotion
+    ? 0.78
+    : 0.7 + layerBreath + Math.sin(time * 0.00135) * 0.08;
   const motionRamp = reducedMotion ? 0 : easeOutCubic(clamp(time / 1700, 0, 1));
   const sweepAlpha = reducedMotion
     ? 0
-    : motionRamp * (0.24 + Math.sin(time * 0.00105) * 0.12);
+    : motionRamp * (0.24 + Math.sin(time * 0.00105) * 0.12 + layerBreath * 0.24);
+  const contrastAlpha = reducedMotion
+    ? 0
+    : motionRamp * (0.055 + Math.pow(Math.max(layerBreath, 0), 2) * 0.12);
 
   context.clearRect(0, 0, width, height);
-  drawFocalBloom(context, focalX, focalY, width, height, diagonal, pulse);
-  drawLayer(
-    context,
-    baseLayer,
-    ambientAlpha,
-    driftX * 0.42,
-    driftY * 0.42,
-    reducedMotion ? 0 : Math.sin(time * 0.00018) * 0.028,
-    reducedMotion ? 1 : 1 + Math.sin(time * 0.00024) * 0.032
-  );
+  drawFocalBloom(context, focalX, focalY, width, height, diagonal, pulse, time, reducedMotion);
 
-  if (!reducedMotion) {
+  if (baseLayer) {
+    drawLayer(
+      context,
+      baseLayer,
+      ambientAlpha,
+      driftX,
+      driftY,
+      reducedMotion ? 0 : Math.sin(time * 0.00018) * 0.028,
+      reducedMotion ? 1 : 1 + Math.sin(time * 0.00024) * 0.032
+    );
+
+    if (!reducedMotion) {
+      drawLayer(
+        context,
+        baseLayer,
+        contrastAlpha,
+        driftX,
+        driftY,
+        Math.sin(time * 0.0002 + 1.2) * -0.018,
+        1.02 + Math.cos(time * 0.00032) * 0.028
+      );
+    }
+  }
+
+  if (!reducedMotion && sweepLayer) {
     drawLayer(
       context,
       sweepLayer,
       sweepAlpha,
-      Math.sin(time * 0.00062) * 42,
-      Math.cos(time * 0.00048) * 30,
+      driftX,
+      driftY,
       Math.sin(time * 0.00034) * 0.058,
       1.03 + Math.sin(time * 0.0004) * 0.05
     );
@@ -366,11 +605,16 @@ function drawLightfield(
       context,
       sweepLayer,
       sweepAlpha * 0.58,
-      Math.sin(time * 0.00052 + 1.8) * -34,
-      Math.cos(time * 0.00044 + 0.7) * -24,
+      driftX,
+      driftY,
       Math.cos(time * 0.00028) * -0.046,
       1.08 + Math.cos(time * 0.00036) * 0.04
     );
+  }
+
+  if (!reducedMotion && baseLayer) {
+    drawLiveRays(context, baseLayer, focalX, focalY, time, motionRamp);
+    drawGlints(context, baseLayer, focalX, focalY, time, motionRamp);
   }
 
   if (!reducedMotion) {
@@ -384,8 +628,8 @@ function drawLightfield(
         context,
         burstLayer,
         flashAlpha,
-        driftX * 0.55,
-        driftY * 0.55,
+        driftX,
+        driftY,
         Math.sin(time * 0.00055) * 0.018,
         burstScale
       );
@@ -393,8 +637,8 @@ function drawLightfield(
         context,
         burstLayer,
         flashAlpha * 0.36,
-        driftX * -0.24,
-        driftY * -0.24,
+        driftX,
+        driftY,
         -Math.sin(time * 0.00038) * 0.016,
         burstScale * 1.08
       );
@@ -426,28 +670,59 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
     let baseLayer: LightfieldLayer | null = null;
     let sweepLayer: LightfieldLayer | null = null;
     let burstLayer: LightfieldLayer | null = null;
+    let baseLayerTimeout = 0;
+    let sweepLayerTimeout = 0;
+    let layerGeneration = 0;
     const reducedMotion = Boolean(shouldReduceMotion);
-    const startTime = performance.now();
+    let startTime = performance.now();
 
     const resize = () => {
+      window.clearTimeout(baseLayerTimeout);
+      window.clearTimeout(sweepLayerTimeout);
+
       const rect = canvas.getBoundingClientRect();
       const width = Math.max(1, rect.width);
       const height = Math.max(1, rect.height);
       const renderScale = getRenderScale(width, height);
+      const generation = layerGeneration + 1;
 
+      layerGeneration = generation;
       canvas.width = Math.floor(width * renderScale);
       canvas.height = Math.floor(height * renderScale);
       context.setTransform(renderScale, 0, 0, renderScale, 0, 0);
       context.imageSmoothingEnabled = true;
 
-      baseLayer = createLayer(width, height, renderScale, drawBaseRays);
-      sweepLayer = createLayer(width, height, renderScale, drawSweepRays);
+      baseLayer = null;
+      sweepLayer = null;
       burstLayer = createLayer(width, height, renderScale, drawBurstRays);
+      startTime = performance.now();
       drawLightfield(context, baseLayer, sweepLayer, burstLayer, 0, reducedMotion);
+
+      if (reducedMotion) {
+        baseLayer = createLayer(width, height, renderScale, drawBaseRays);
+        sweepLayer = createLayer(width, height, renderScale, drawSweepRays);
+        drawLightfield(context, baseLayer, sweepLayer, burstLayer, 0, reducedMotion);
+        return;
+      }
+
+      baseLayerTimeout = window.setTimeout(() => {
+        if (layerGeneration !== generation) {
+          return;
+        }
+
+        baseLayer = createLayer(width, height, renderScale, drawBaseRays);
+      }, 900);
+      sweepLayerTimeout = window.setTimeout(() => {
+        if (layerGeneration !== generation) {
+          return;
+        }
+
+        sweepLayer = createLayer(width, height, renderScale, drawSweepRays);
+      }, 1250);
     };
 
     const render = (time: number) => {
-      if (baseLayer && sweepLayer && burstLayer) {
+      if (burstLayer) {
         drawLightfield(context, baseLayer, sweepLayer, burstLayer, time - startTime, reducedMotion);
       }
 
@@ -465,6 +740,8 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.clearTimeout(baseLayerTimeout);
+      window.clearTimeout(sweepLayerTimeout);
       window.cancelAnimationFrame(animationFrame);
     };
   }, [shouldReduceMotion]);
