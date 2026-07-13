@@ -64,8 +64,9 @@ const BURST_ANGLES = [
   1.18, 1.36, 1.54, 1.72, 1.9, 2.08, 2.24, 2.42, 2.68,
 ];
 
-const LIVE_RAY_INDEXES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+const LIVE_RAY_INDEXES = [1, 3, 5, 7, 11, 13, 17, 21];
 const GLINT_RAY_INDEXES = [2, 6, 10, 14, 18, 22];
+const DETAIL_RAMP_START = 3400;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -81,6 +82,12 @@ function triangleWave(value: number) {
 
 function easeOutCubic(value: number) {
   return 1 - Math.pow(1 - value, 3);
+}
+
+function pseudoRandom(seed: number) {
+  const value = Math.sin(seed * 12.9898) * 43758.5453;
+
+  return value - Math.floor(value);
 }
 
 function getRenderScale(width: number, height: number) {
@@ -183,6 +190,45 @@ function drawTaperedRay(
   context.restore();
 }
 
+function drawMaskRay(
+  context: CanvasRenderingContext2D,
+  layer: LightfieldLayer,
+  {
+    angle,
+    length,
+    endWidth,
+    alpha,
+    apexOffset = 1,
+    apexWidth = 0.7,
+  }: TaperedRayOptions
+) {
+  const directionX = Math.cos(angle);
+  const directionY = Math.sin(angle);
+  const normalX = -directionY;
+  const normalY = directionX;
+  const startX = layer.focalX + directionX * apexOffset;
+  const startY = layer.focalY + directionY * apexOffset;
+  const endX = layer.focalX + directionX * layer.diagonal * length;
+  const endY = layer.focalY + directionY * layer.diagonal * length;
+  const startHalfWidth = apexWidth / 2;
+  const endHalfWidth = endWidth / 2;
+  const gradient = context.createLinearGradient(startX, startY, endX, endY);
+
+  gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+  gradient.addColorStop(0.12, `rgba(255, 255, 255, ${alpha * 0.58})`);
+  gradient.addColorStop(0.5, `rgba(255, 255, 255, ${alpha})`);
+  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+  context.beginPath();
+  context.moveTo(startX + normalX * startHalfWidth, startY + normalY * startHalfWidth);
+  context.lineTo(endX + normalX * endHalfWidth, endY + normalY * endHalfWidth);
+  context.lineTo(endX - normalX * endHalfWidth, endY - normalY * endHalfWidth);
+  context.lineTo(startX - normalX * startHalfWidth, startY - normalY * startHalfWidth);
+  context.closePath();
+  context.fillStyle = gradient;
+  context.fill();
+}
+
 function drawBaseRays(context: CanvasRenderingContext2D, layer: LightfieldLayer) {
   const { width } = layer;
 
@@ -192,7 +238,15 @@ function drawBaseRays(context: CanvasRenderingContext2D, layer: LightfieldLayer)
     const angle = streak.angle + Math.sin(index * 1.8) * 0.025;
     const brightness = streak.alpha * 0.95;
     const endWidth = streak.width * (width > 700 ? 18 : 12);
+    const volumeWidth = endWidth * (index % 4 === 0 ? 3.4 : 2.35);
 
+    drawTaperedRay(context, layer, {
+      angle,
+      length: streak.length,
+      endWidth: volumeWidth,
+      alpha: brightness * 0.13,
+      apexWidth: 1.2,
+    });
     drawTaperedRay(context, layer, {
       angle,
       length: streak.length,
@@ -209,6 +263,61 @@ function drawBaseRays(context: CanvasRenderingContext2D, layer: LightfieldLayer)
       apexWidth: 0.45,
     });
   });
+}
+
+function drawShadowRays(context: CanvasRenderingContext2D, layer: LightfieldLayer) {
+  const { width } = layer;
+
+  context.globalCompositeOperation = "source-over";
+
+  STREAKS.forEach((streak, index) => {
+    if (index % 2 === 0) {
+      return;
+    }
+
+    const angle = streak.angle + Math.cos(index * 0.93) * 0.045;
+    const endWidth = streak.width * (width > 700 ? 34 : 23);
+    const alpha = index % 5 === 0 ? 0.22 : 0.13;
+
+    drawMaskRay(context, layer, {
+      angle,
+      length: streak.length * 1.08,
+      endWidth,
+      alpha,
+      apexWidth: 1.6,
+    });
+  });
+}
+
+function drawDustField(context: CanvasRenderingContext2D, layer: LightfieldLayer) {
+  const { width, height, diagonal, focalX, focalY } = layer;
+  const particleCount = clamp(Math.floor((width * height) / 15000), 64, 150);
+
+  context.globalCompositeOperation = "screen";
+
+  for (let index = 0; index < particleCount; index += 1) {
+    const seed = index + width * 0.017 + height * 0.031;
+    const angle = -2.8 + pseudoRandom(seed) * 5.6;
+    const distance = diagonal * (0.1 + pseudoRandom(seed + 1) * 0.76);
+    const drift = (pseudoRandom(seed + 2) - 0.5) * diagonal * 0.11;
+    const directionX = Math.cos(angle);
+    const directionY = Math.sin(angle);
+    const normalX = -directionY;
+    const normalY = directionX;
+    const x = focalX + directionX * distance + normalX * drift;
+    const y = focalY + directionY * distance + normalY * drift;
+    const size = 0.45 + pseudoRandom(seed + 3) * (width > 700 ? 1.35 : 0.9);
+    const alpha = 0.035 + pseudoRandom(seed + 4) * 0.085;
+
+    context.save();
+    context.translate(x, y);
+    context.rotate(angle);
+    context.beginPath();
+    context.ellipse(0, 0, size * 2.8, size, 0, 0, Math.PI * 2);
+    context.fillStyle = `rgba(224, 244, 255, ${alpha})`;
+    context.fill();
+    context.restore();
+  }
 }
 
 function drawSweepRays(context: CanvasRenderingContext2D, layer: LightfieldLayer) {
@@ -524,10 +633,11 @@ function drawLayer(
   offsetX: number,
   offsetY: number,
   rotation: number,
-  scale: number
+  scale: number,
+  operation: GlobalCompositeOperation = "screen"
 ) {
   context.save();
-  context.globalCompositeOperation = "screen";
+  context.globalCompositeOperation = operation;
   context.globalAlpha = clamp(alpha, 0, 1);
   context.translate(layer.focalX + offsetX, layer.focalY + offsetY);
   context.rotate(rotation);
@@ -541,25 +651,36 @@ function drawLightfield(
   context: CanvasRenderingContext2D,
   baseLayer: LightfieldLayer | null,
   sweepLayer: LightfieldLayer | null,
+  shadowLayer: LightfieldLayer | null,
+  dustLayer: LightfieldLayer | null,
   burstLayer: LightfieldLayer,
   time: number,
   reducedMotion: boolean
 ) {
   const sceneLayer = baseLayer ?? burstLayer;
   const { width, height, diagonal } = sceneLayer;
-  const driftX = reducedMotion ? 0 : Math.sin(time * 0.0002754) * 34;
-  const driftY = reducedMotion ? 0 : Math.cos(time * 0.0003213) * 24;
+  const driftX = reducedMotion
+    ? 0
+    : Math.sin(time * 0.000112) * 15 + Math.sin(time * 0.00024) * 4;
+  const driftY = reducedMotion
+    ? 0
+    : Math.cos(time * 0.00013) * 11 + Math.sin(time * 0.00019) * 3;
   const focalX = sceneLayer.focalX + driftX;
   const focalY = sceneLayer.focalY + driftY;
-  const pulse = reducedMotion ? 0.62 : 0.56 + Math.sin(time * 0.0017) * 0.26;
+  const pulse = reducedMotion
+    ? 0.62
+    : 0.54 + Math.sin(time * 0.0014) * 0.22 + Math.sin(time * 0.00037) * 0.08;
   const layerBreath = reducedMotion ? 0 : Math.sin(time * 0.00072) * 0.16;
   const ambientAlpha = reducedMotion
     ? 0.78
-    : 0.7 + layerBreath + Math.sin(time * 0.00135) * 0.08;
+    : 0.68 + layerBreath + Math.sin(time * 0.00108) * 0.08;
   const motionRamp = reducedMotion ? 0 : easeOutCubic(clamp(time / 1700, 0, 1));
+  const detailRamp = reducedMotion
+    ? 0
+    : easeOutCubic(clamp((time - DETAIL_RAMP_START) / 900, 0, 1));
   const sweepAlpha = reducedMotion
     ? 0
-    : motionRamp * (0.24 + Math.sin(time * 0.00105) * 0.12 + layerBreath * 0.24);
+    : detailRamp * (0.24 + Math.sin(time * 0.00105) * 0.12 + layerBreath * 0.24);
   const contrastAlpha = reducedMotion
     ? 0
     : motionRamp * (0.055 + Math.pow(Math.max(layerBreath, 0), 2) * 0.12);
@@ -612,16 +733,47 @@ function drawLightfield(
     );
   }
 
-  if (!reducedMotion && baseLayer) {
-    drawLiveRays(context, baseLayer, focalX, focalY, time, motionRamp);
-    drawGlints(context, baseLayer, focalX, focalY, time, motionRamp);
+  if (shadowLayer) {
+    const shadowAlpha = reducedMotion
+      ? 0.28
+      : detailRamp * (0.25 + Math.sin(time * 0.00051 + 1.8) * 0.08);
+
+    drawLayer(
+      context,
+      shadowLayer,
+      shadowAlpha,
+      driftX * 0.42,
+      driftY * 0.36,
+      reducedMotion ? 0 : Math.sin(time * 0.00019 + 0.7) * 0.052,
+      reducedMotion ? 1 : 1.02 + Math.sin(time * 0.00027) * 0.044,
+      "destination-out"
+    );
+  }
+
+  if (dustLayer) {
+    drawLayer(
+      context,
+      dustLayer,
+      reducedMotion ? 0.16 : detailRamp * (0.16 + Math.sin(time * 0.00088) * 0.04),
+      driftX * 1.26,
+      driftY * 1.4,
+      reducedMotion ? 0 : Math.sin(time * 0.00012) * 0.02,
+      reducedMotion ? 1 : 1.01 + Math.sin(time * 0.00018 + 2.1) * 0.018
+    );
+  }
+
+  if (!reducedMotion && baseLayer && detailRamp > 0) {
+    drawLiveRays(context, baseLayer, focalX, focalY, time, detailRamp);
+    drawGlints(context, baseLayer, focalX, focalY, time, detailRamp);
   }
 
   if (!reducedMotion) {
     const { reveal, flash } = getIntroFlash(time);
 
-    if (flash > 0.012) {
-      const flashAlpha = clamp(flash * 1.4, 0, 1);
+    const contentSafeFlash = flash * clamp(1 - (time - 1180) / 620, 0, 1);
+
+    if (contentSafeFlash > 0.012) {
+      const flashAlpha = clamp(contentSafeFlash * 1.4, 0, 1);
       const burstScale = 0.86 + reveal * 0.16 + flash * 0.07;
 
       drawLayer(
@@ -669,9 +821,13 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
     let animationFrame = 0;
     let baseLayer: LightfieldLayer | null = null;
     let sweepLayer: LightfieldLayer | null = null;
+    let shadowLayer: LightfieldLayer | null = null;
+    let dustLayer: LightfieldLayer | null = null;
     let burstLayer: LightfieldLayer | null = null;
     let baseLayerTimeout = 0;
     let sweepLayerTimeout = 0;
+    let shadowLayerTimeout = 0;
+    let dustLayerTimeout = 0;
     let layerGeneration = 0;
     const reducedMotion = Boolean(shouldReduceMotion);
     let startTime = performance.now();
@@ -679,6 +835,8 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
     const resize = () => {
       window.clearTimeout(baseLayerTimeout);
       window.clearTimeout(sweepLayerTimeout);
+      window.clearTimeout(shadowLayerTimeout);
+      window.clearTimeout(dustLayerTimeout);
 
       const rect = canvas.getBoundingClientRect();
       const width = Math.max(1, rect.width);
@@ -694,14 +852,36 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
 
       baseLayer = null;
       sweepLayer = null;
+      shadowLayer = null;
+      dustLayer = null;
       burstLayer = createLayer(width, height, renderScale, drawBurstRays);
       startTime = performance.now();
-      drawLightfield(context, baseLayer, sweepLayer, burstLayer, 0, reducedMotion);
+      drawLightfield(
+        context,
+        baseLayer,
+        sweepLayer,
+        shadowLayer,
+        dustLayer,
+        burstLayer,
+        0,
+        reducedMotion
+      );
 
       if (reducedMotion) {
         baseLayer = createLayer(width, height, renderScale, drawBaseRays);
         sweepLayer = createLayer(width, height, renderScale, drawSweepRays);
-        drawLightfield(context, baseLayer, sweepLayer, burstLayer, 0, reducedMotion);
+        shadowLayer = createLayer(width, height, renderScale, drawShadowRays);
+        dustLayer = createLayer(width, height, renderScale, drawDustField);
+        drawLightfield(
+          context,
+          baseLayer,
+          sweepLayer,
+          shadowLayer,
+          dustLayer,
+          burstLayer,
+          0,
+          reducedMotion
+        );
         return;
       }
 
@@ -711,19 +891,42 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
         }
 
         baseLayer = createLayer(width, height, renderScale, drawBaseRays);
-      }, 900);
+      }, 220);
+      shadowLayerTimeout = window.setTimeout(() => {
+        if (layerGeneration !== generation) {
+          return;
+        }
+
+        shadowLayer = createLayer(width, height, renderScale, drawShadowRays);
+      }, 4200);
       sweepLayerTimeout = window.setTimeout(() => {
         if (layerGeneration !== generation) {
           return;
         }
 
         sweepLayer = createLayer(width, height, renderScale, drawSweepRays);
-      }, 1250);
+      }, 4450);
+      dustLayerTimeout = window.setTimeout(() => {
+        if (layerGeneration !== generation) {
+          return;
+        }
+
+        dustLayer = createLayer(width, height, renderScale, drawDustField);
+      }, 4700);
     };
 
     const render = (time: number) => {
       if (burstLayer) {
-        drawLightfield(context, baseLayer, sweepLayer, burstLayer, time - startTime, reducedMotion);
+        drawLightfield(
+          context,
+          baseLayer,
+          sweepLayer,
+          shadowLayer,
+          dustLayer,
+          burstLayer,
+          time - startTime,
+          reducedMotion
+        );
       }
 
       if (!reducedMotion) {
@@ -742,6 +945,8 @@ export function HeroLightfieldCanvas({ className }: HeroLightfieldCanvasProps) {
       window.removeEventListener("resize", resize);
       window.clearTimeout(baseLayerTimeout);
       window.clearTimeout(sweepLayerTimeout);
+      window.clearTimeout(shadowLayerTimeout);
+      window.clearTimeout(dustLayerTimeout);
       window.cancelAnimationFrame(animationFrame);
     };
   }, [shouldReduceMotion]);
