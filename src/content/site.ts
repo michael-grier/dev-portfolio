@@ -120,12 +120,6 @@ export const resumeSummary = [
   'Strong fit for teams that need someone comfortable moving between UI details, data flow, API contracts, and pragmatic shipping tradeoffs.',
 ];
 
-export const resumeHighlights = [
-  'Builds responsive product surfaces with attention to accessibility, information hierarchy, and motion that supports the workflow.',
-  'Uses TypeScript, component boundaries, and clear data contracts to keep fast-moving codebases maintainable.',
-  'Turns ambiguous feature requests into scoped implementation plans, testable milestones, and useful shipped increments.',
-];
-
 export const experienceRoles: ExperienceRole[] = [
   {
     title: 'Software Developer',
@@ -181,9 +175,9 @@ export const featuredProjects: Project[] = [
     problem:
       'Operational workflows needed a calmer interface that made status, priority, and next actions easier to scan.',
     contribution:
-      'Designed the page structure, reusable components, responsive states, and typed data boundaries for the primary user flow.',
+      'I designed the page structure, reusable components, responsive states, and typed data boundaries for the primary user flow.',
     result:
-      'A faster-feeling product surface with clearer hierarchy, fewer ambiguous states, and room for future workflow depth.',
+      'The result is a faster-feeling product surface with clearer hierarchy, fewer ambiguous states, and room for future workflow depth.',
     media: 'interface',
   },
   {
@@ -197,9 +191,9 @@ export const featuredProjects: Project[] = [
     problem:
       'Developers needed a compact view of system health, integration status, and follow-up work without noisy dashboard chrome.',
     contribution:
-      'Modeled the data flow, shaped the dashboard UI, and mapped the interaction states for empty, loading, and review moments.',
+      'I modeled the data flow, shaped the dashboard UI, and mapped the interaction states for empty, loading, and review moments.',
     result:
-      'A focused technical tool direction with practical implementation boundaries and a cleaner path to production hardening.',
+      'The result is a focused technical tool with practical implementation boundaries and a cleaner path to production hardening.',
     media: 'systems',
   },
   {
@@ -213,9 +207,9 @@ export const featuredProjects: Project[] = [
     problem:
       'Project work needed to feel inspectable and credible while still carrying enough visual energy to be memorable.',
     contribution:
-      'Built responsive media sections, restrained motion, content structure, and reusable presentation patterns.',
+      'I built responsive media sections, restrained motion, content structure, and reusable presentation patterns.',
     result:
-      'A portfolio-ready project page pattern that balances visual polish with concrete implementation context.',
+      'The result is a project page pattern that balances visual polish with concrete implementation context.',
     media: 'delivery',
   },
 ];

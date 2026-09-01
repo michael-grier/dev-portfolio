@@ -1,9 +1,4 @@
-import { Box, Gauge, Layers3, Terminal } from "lucide-react";
-
 import { PageShell } from "@/components/site/page-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { featuredProjects, type Project } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -15,71 +10,41 @@ export const metadata = {
 
 const mediaStyles: Record<
   Project["media"],
-  {
-    Icon: typeof Layers3;
-    background: string;
-    accent: string;
-    lines: string[];
-  }
+  { label: string; background: string; sheet: string }
 > = {
   interface: {
-    Icon: Layers3,
+    label: "text-sky-300/80",
     background:
-      "bg-[radial-gradient(circle_at_22%_18%,rgba(125,211,252,0.34),transparent_13rem),linear-gradient(135deg,rgba(15,23,42,0.34),rgba(2,6,23,0.88))]",
-    accent: "from-sky-200/90 to-cyan-300/30",
-    lines: ["w-11/12", "w-8/12", "w-10/12"],
+      "bg-[radial-gradient(circle_at_30%_30%,rgba(125,211,252,0.28),transparent_14rem),linear-gradient(135deg,rgba(15,23,42,0.3),rgba(2,6,23,0.85))]",
+    sheet: "border-sky-200/20 from-sky-300/[0.08]",
   },
   systems: {
-    Icon: Terminal,
+    label: "text-emerald-300/70",
     background:
-      "bg-[radial-gradient(circle_at_78%_14%,rgba(74,222,128,0.22),transparent_12rem),linear-gradient(135deg,rgba(8,13,23,0.55),rgba(2,6,23,0.9))]",
-    accent: "from-emerald-200/90 to-sky-300/30",
-    lines: ["w-9/12", "w-11/12", "w-7/12"],
+      "bg-[radial-gradient(circle_at_70%_30%,rgba(74,222,128,0.18),transparent_14rem),linear-gradient(225deg,rgba(8,13,23,0.5),rgba(2,6,23,0.88))]",
+    sheet: "border-emerald-200/20 from-emerald-300/[0.07]",
   },
   delivery: {
-    Icon: Gauge,
+    label: "text-violet-300/70",
     background:
-      "bg-[radial-gradient(circle_at_55%_20%,rgba(216,180,254,0.22),transparent_12rem),linear-gradient(135deg,rgba(15,23,42,0.34),rgba(2,6,23,0.9))]",
-    accent: "from-violet-200/90 to-sky-300/30",
-    lines: ["w-10/12", "w-6/12", "w-11/12"],
+      "bg-[radial-gradient(circle_at_45%_25%,rgba(216,180,254,0.2),transparent_14rem),linear-gradient(135deg,rgba(15,23,42,0.35),rgba(2,6,23,0.88))]",
+    sheet: "border-violet-200/20 from-violet-300/[0.07]",
   },
 };
 
+/* Abstract layered sheets rising toward the light — stands in for product imagery. */
 function ProjectMedia({ project }: { project: Project }) {
   const style = mediaStyles[project.media];
-  const Icon = style.Icon;
 
   return (
-    <div
-      className={cn(
-        "relative aspect-video overflow-hidden border-b border-white/10",
-        style.background
-      )}
-    >
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.1)_34%,transparent_58%)] opacity-70" />
-      <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/72 backdrop-blur-xl">
-        <Icon className="size-3.5 text-sky-100" />
-        {project.status}
-      </div>
-      <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/12 bg-black/24 p-4 shadow-2xl shadow-sky-950/30 backdrop-blur-xl">
-        <div className="mb-4 flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-red-300/70" />
-          <span className="size-2 rounded-full bg-amber-200/70" />
-          <span className="size-2 rounded-full bg-emerald-200/70" />
-        </div>
-        <div className="grid gap-2">
-          {style.lines.map((width, index) => (
-            <div
-              key={`${project.title}-${width}-${index}`}
-              className={cn(
-                "h-2 rounded-full bg-gradient-to-r opacity-80",
-                style.accent,
-                width
-              )}
-            />
-          ))}
-        </div>
-      </div>
+    <div className={cn("relative min-h-[16rem]", style.background)}>
+      <div className="absolute inset-x-10 bottom-10 top-14 rounded-t-2xl border border-b-0 border-white/15 bg-gradient-to-b from-white/[0.09] to-transparent backdrop-blur-sm" />
+      <div
+        className={cn(
+          "absolute inset-x-16 bottom-10 top-24 rounded-t-xl border border-b-0 bg-gradient-to-b to-transparent",
+          style.sheet
+        )}
+      />
     </div>
   );
 }
@@ -87,65 +52,58 @@ function ProjectMedia({ project }: { project: Project }) {
 export default function ProjectsPage() {
   return (
     <PageShell
-      eyebrow="Projects"
-      title="Recent development work"
-      description="Selected projects presented with media, concise product context, and practical implementation notes."
+      title="Things I've built."
+      subtitle={
+        <>
+          Product context first,{" "}
+          <span className="text-sky-300/90">then the code</span>.
+        </>
+      }
     >
-      <div className="grid gap-5 lg:grid-cols-3">
-        {featuredProjects.map((project) => (
-          <Card
-            key={project.title}
-            className="overflow-hidden border-white/10 bg-white/[0.06] text-white shadow-2xl shadow-sky-950/20 backdrop-blur-xl"
-          >
-            <ProjectMedia project={project} />
-            <CardHeader>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge className="border-white/12 bg-white/10 text-sky-100 hover:bg-white/10">
-                  <Box className="size-3" />
-                  {project.year}
-                </Badge>
-                <Badge
-                  variant="secondary"
-                  className="bg-white/10 text-white/70 hover:bg-white/14"
-                >
-                  {project.role}
-                </Badge>
+      <div className="space-y-10">
+        {featuredProjects.map((project, index) => {
+          const style = mediaStyles[project.media];
+          const mediaOnLeft = index % 2 === 1;
+
+          return (
+            <article
+              key={project.title}
+              className={cn(
+                "glow-pane grid gap-8 overflow-hidden rounded-3xl border border-white/[0.12] bg-white/[0.05] text-white shadow-2xl shadow-sky-950/30 backdrop-blur-2xl",
+                mediaOnLeft
+                  ? "glow-pane-tilt-left lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+                  : "glow-pane-tilt-right lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]"
+              )}
+            >
+              <div
+                className={cn(
+                  "order-last min-h-[16rem]",
+                  mediaOnLeft && "lg:order-first"
+                )}
+              >
+                <ProjectMedia project={project} />
               </div>
-              <CardTitle className="pt-2">{project.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              <p className="text-sm leading-6 text-white/62">
-                {project.summary}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.stack.map((item) => (
-                  <Badge
-                    key={item}
-                    variant="secondary"
-                    className="bg-white/10 text-white hover:bg-white/14"
-                  >
-                    {item}
-                  </Badge>
-                ))}
+              <div className="order-first p-8 sm:p-10">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h2 className="text-3xl font-semibold">{project.title}</h2>
+                  <span className={cn("font-mono text-sm", style.label)}>
+                    {project.year} · {project.status.toLowerCase()}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-white/45">{project.role}</p>
+                <p className="mt-5 max-w-xl text-base leading-8 text-white/60">
+                  {project.problem}
+                </p>
+                <p className="mt-4 max-w-xl text-base leading-8 text-white/60">
+                  {project.contribution} {project.result}
+                </p>
+                <p className="mt-6 font-mono text-sm text-white/40">
+                  {project.stack.join(" · ")}
+                </p>
               </div>
-              <Separator className="bg-white/10" />
-              <div className="grid gap-4 text-sm leading-6">
-                <div>
-                  <p className="font-medium text-white">Problem</p>
-                  <p className="mt-1 text-white/58">{project.problem}</p>
-                </div>
-                <div>
-                  <p className="font-medium text-white">Contribution</p>
-                  <p className="mt-1 text-white/58">{project.contribution}</p>
-                </div>
-                <div>
-                  <p className="font-medium text-white">Result</p>
-                  <p className="mt-1 text-white/58">{project.result}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </PageShell>
   );
