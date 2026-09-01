@@ -112,6 +112,70 @@
 }
 
 @layer utilities {
+  /* Inner-page light beam echoing the hero lightfield; the star specks come
+     from PageStarfieldCanvas. */
+  .page-beam {
+    position: fixed;
+    top: -12rem;
+    left: 50%;
+    width: min(60rem, 100vw);
+    height: 34rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.22), transparent 68%);
+  }
+
+  /* Glass pane with a lit top edge; lifts toward the light on hover. */
+  .glow-pane {
+    position: relative;
+    transition:
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glow-pane::before {
+    content: "";
+    position: absolute;
+    inset-inline: 1.5rem;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.65), transparent);
+  }
+  .glow-pane:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 30px 60px -20px rgba(2, 6, 23, 0.9),
+      0 0 40px -18px rgba(56, 189, 248, 0.5);
+  }
+
+  /* Resting 3D pose for project panes: a slight angle toward the copy that flattens on hover. */
+  @media (min-width: 1024px) {
+    .glow-pane-tilt-right {
+      transform: perspective(1400px) rotateY(-2.5deg);
+    }
+    .glow-pane-tilt-left {
+      transform: perspective(1400px) rotateY(2.5deg);
+    }
+    .glow-pane-tilt-right:hover,
+    .glow-pane-tilt-left:hover {
+      transform: perspective(1400px) rotateY(0deg) translateY(-6px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glow-pane {
+      transition: none;
+    }
+    .glow-pane:hover,
+    .glow-pane-tilt-right:hover,
+    .glow-pane-tilt-left:hover {
+      transform: none;
+    }
+    .glow-pane-tilt-right,
+    .glow-pane-tilt-left {
+      transform: none;
+    }
+  }
+
   .hero-atmosphere {
     background:
       radial-gradient(circle at 50% 58%, rgba(232, 247, 255, 0.76), transparent 3.5rem),
