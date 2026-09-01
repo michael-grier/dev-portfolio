@@ -27,7 +27,7 @@ export default function ContactPage() {
     >
       <div className="max-w-2xl">
         <p className="text-lg leading-9 text-white/65">
-          I'm most interested in practical product engineering work: clear web
+          I&apos;m most interested in practical product engineering work: clear web
           interfaces, typed React applications, full-stack features, and teams
           that care about maintainable delivery.
         </p>

@@ -15,7 +15,7 @@ export default function NotFound() {
       title="Lost in the dark."
       subtitle={
         <>
-          There's <span className="text-sky-300/90">no page</span> at this
+          There&apos;s <span className="text-sky-300/90">no page</span> at this
           address.
         </>
       }
