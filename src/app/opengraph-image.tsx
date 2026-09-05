@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { siteConfig } from "@/content/site";
+
 export const alt = "Michael Grier software developer portfolio";
 
 export const size = {
@@ -9,94 +11,101 @@ export const size = {
 
 export const contentType = "image/png";
 
+// Static stand-in for the riso lightfield: two fans of hairline rays through
+// the same source, a degree out of register. Satori has no conic gradients,
+// blend modes, or transform-origin, so each ray is a long bar centred on the
+// source and rotated about its middle.
+const RAY_ANGLES = Array.from({ length: 40 }, (_, index) => 96 + index * 4.2);
+const SOURCE = { x: 1000, y: 120 };
+const RAY_LENGTH = 3000;
+
+function InkFan({ color, offset }: { color: string; offset: number }) {
+  return (
+    <div style={{ display: "flex" }}>
+      {RAY_ANGLES.map((angle, index) => {
+        const height = index % 3 === 0 ? 5 : 2;
+
+        return (
+          <div
+            key={angle}
+            style={{
+              backgroundColor: color,
+              height,
+              left: SOURCE.x - RAY_LENGTH / 2,
+              opacity: 0.5,
+              position: "absolute",
+              top: SOURCE.y - height / 2,
+              transform: `rotate(${angle + offset}deg)`,
+              width: RAY_LENGTH,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Image() {
   return new ImageResponse(
     (
       <div
         style={{
-          alignItems: "center",
-          backgroundColor: "#020617",
-          color: "white",
+          backgroundColor: "#f1eee8",
+          color: "#1c1c1c",
           display: "flex",
           height: "100%",
-          justifyContent: "center",
+          overflow: "hidden",
           position: "relative",
           width: "100%",
         }}
       >
+        <InkFan color="#ff48b0" offset={0} />
+        <InkFan color="#0078bf" offset={1.4} />
         <div
           style={{
             background:
-              "radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.36), rgba(2, 6, 23, 0) 54%)",
-            height: 820,
-            left: 260,
-            position: "absolute",
-            top: -40,
-            width: 820,
-          }}
-        />
-        <div
-          style={{
-            borderTop: "2px solid rgba(186, 230, 253, 0.22)",
-            height: 1,
+              "linear-gradient(90deg, rgba(241,238,232,1) 30%, rgba(241,238,232,0.4) 70%, rgba(241,238,232,0))",
+            height: "100%",
             left: 0,
             position: "absolute",
-            top: 130,
-            transform: "rotate(-8deg)",
-            width: 1300,
+            top: 0,
+            width: "100%",
           }}
         />
         <div
           style={{
+            bottom: 72,
             display: "flex",
             flexDirection: "column",
-            gap: 32,
-            padding: "72px",
-            position: "relative",
-            width: "100%",
+            gap: 20,
+            left: 72,
+            position: "absolute",
+            width: 900,
           }}
         >
           <div
             style={{
-              border: "1px solid rgba(255,255,255,0.16)",
-              borderRadius: 999,
-              color: "rgba(186,230,253,0.86)",
-              display: "flex",
-              fontSize: 24,
-              fontWeight: 600,
-              padding: "12px 22px",
-              alignSelf: "flex-start",
-            }}
-          >
-            Software Developer
-          </div>
-          <div
-            style={{
               display: "flex",
               flexDirection: "column",
-              fontSize: 82,
-              fontWeight: 700,
-              letterSpacing: 0,
+              fontSize: 84,
+              fontWeight: 500,
+              letterSpacing: -1,
               lineHeight: 0.98,
-              maxWidth: 880,
             }}
           >
-            <span>Michael Grier</span>
-            <span style={{ color: "rgba(255,255,255,0.72)" }}>
-              Full-stack web products
-            </span>
+            <span>{siteConfig.hero.greeting}</span>
+            <span style={{ color: "rgba(28,28,28,0.5)" }}>{siteConfig.hero.subtitle}</span>
           </div>
           <div
             style={{
-              color: "rgba(255,255,255,0.66)",
+              color: "rgba(28,28,28,0.72)",
               display: "flex",
-              fontSize: 32,
-              lineHeight: 1.32,
-              maxWidth: 820,
+              fontSize: 28,
+              lineHeight: 1.35,
+              maxWidth: 760,
             }}
           >
-            Sharp, resilient interfaces built with React, Next.js, TypeScript,
-            and pragmatic delivery habits.
+            {siteConfig.hero.intro}
           </div>
         </div>
       </div>

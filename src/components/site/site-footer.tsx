@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 
-import { contactLinks, heroHeadline, navItems, siteConfig } from "@/content/site";
+import { SocialIcon } from "@/components/site/social-icons";
+import { contactLinks, siteConfig } from "@/content/site";
 
 export function SiteFooter() {
   const pathname = usePathname();
@@ -14,62 +14,34 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="border-t border-white/10 bg-background/72 px-5 py-10 text-white backdrop-blur-xl sm:px-8 lg:px-10">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-[1fr_auto_auto] md:items-start">
-        <div className="max-w-md">
+    <footer className="relative border-t border-ink/12 px-5 py-8 text-sm sm:px-10">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6">
+        <div>
           <Link
             href="/"
-            className="font-semibold outline-none transition hover:text-sky-100 focus-visible:ring-2 focus-visible:ring-sky-300"
+            className="font-medium text-ink outline-none focus-visible:ring-2 focus-visible:ring-blue"
           >
             {siteConfig.name}
           </Link>
-          <p className="mt-3 text-sm leading-6 text-white/56">
-            {heroHeadline}
-          </p>
-          <p className="mt-4 text-xs uppercase tracking-[0.18em] text-sky-200/62">
-            {siteConfig.location} / {siteConfig.availability}
+          <p className="mt-1 text-ink/55">
+            {siteConfig.role}, {siteConfig.location}. {siteConfig.availability}.
           </p>
         </div>
-
-        <nav aria-label="Footer navigation" className="grid gap-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/62">
-            Pages
-          </p>
-          <div className="grid gap-2">
-            {navItems.slice(1).map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-white/58 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-sky-300"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
-
-        <nav aria-label="Footer contact links" className="grid gap-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/62">
-            Contact
-          </p>
-          <div className="grid gap-2">
-            {contactLinks.map((link) => (
+        <nav aria-label="Profiles" className="flex gap-4">
+          {contactLinks.map((link) =>
+            link.icon ? (
               <a
                 key={link.label}
                 href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  link.href.startsWith("http") ? "noreferrer noopener" : undefined
-                }
-                className="group flex items-center gap-2 text-sm text-white/58 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-sky-300"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={link.label}
+                className="text-ink/70 outline-none transition-colors hover:text-blue focus-visible:ring-2 focus-visible:ring-blue"
               >
-                {link.label}
-                {link.href.startsWith("http") ? (
-                  <ArrowUpRight className="size-3.5 text-white/34 transition group-hover:text-white/70" />
-                ) : null}
+                <SocialIcon icon={link.icon} className="size-5" />
               </a>
-            ))}
-          </div>
+            ) : null
+          )}
         </nav>
       </div>
     </footer>

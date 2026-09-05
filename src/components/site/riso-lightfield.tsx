@@ -1,0 +1,73 @@
+import {
+  HeroLightfieldCanvas,
+  type LightfieldPalette,
+} from "@/components/site/hero-lightfield-canvas";
+import { cn } from "@/lib/utils";
+
+// The lightfield as a two-colour risograph print: the same rays printed once
+// in pink and once in blue, a hair out of register, the inks multiplying on
+// the paper. Solid ink per plate; alpha alone carries the tint.
+const PINK: LightfieldPalette = {
+  core: "255, 72, 176",
+  near: "255, 72, 176",
+  mid: "255, 72, 176",
+  far: "255, 72, 176",
+};
+const BLUE: LightfieldPalette = {
+  core: "0, 120, 191",
+  near: "0, 120, 191",
+  mid: "0, 120, 191",
+  far: "0, 120, 191",
+};
+
+type RisoLightfieldProps = {
+  className?: string;
+  focal: { x: number; y: number };
+  intro: boolean;
+  intensity: number;
+  spread: number;
+  drift: number;
+};
+
+// Both plates overhang the container so the nudged, rotated blue plate still
+// covers every edge; otherwise the pink plate shows alone in thin slivers.
+const plateClassName = "inset-[-3%] h-[106%] w-[106%] mix-blend-multiply";
+
+export function RisoLightfield({ className, ...plate }: RisoLightfieldProps) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn("pointer-events-none overflow-hidden", className)}
+    >
+      <HeroLightfieldCanvas
+        palette={PINK}
+        blend="source-over"
+        className={plateClassName}
+        {...plate}
+      />
+      <HeroLightfieldCanvas
+        palette={BLUE}
+        blend="source-over"
+        className={cn(
+          plateClassName,
+          "translate-x-[4px] -translate-y-[3px] rotate-[0.7deg]"
+        )}
+        {...plate}
+      />
+    </div>
+  );
+}
+
+/* The ambient version every inner page shares: source off the top right corner, no flash. */
+export function PageLightfield() {
+  return (
+    <RisoLightfield
+      className="fixed inset-0"
+      focal={{ x: 0.9, y: -0.12 }}
+      intro={false}
+      intensity={0.8}
+      spread={1.5}
+      drift={0.4}
+    />
+  );
+}
