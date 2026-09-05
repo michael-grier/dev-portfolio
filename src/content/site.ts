@@ -1,39 +1,26 @@
-import {
-  BriefcaseBusiness,
-  Code2,
-  FileText,
-  Home,
-  Mail,
-  MessageCircle,
-  Network,
-  UserRound,
-} from 'lucide-react';
-import type { ComponentType } from 'react';
-
 export type NavItem = {
   label: string;
   href: string;
-  icon: ComponentType<{ className?: string }>;
 };
 
 export type Project = {
   title: string;
-  summary: string;
-  year: string;
+  // One line under the title: what it is and the headline stack.
+  tagline: string;
+  repo: string;
+  summary: string[];
   stack: string[];
-  status: 'Live' | 'Case study' | 'In progress';
-  role: string;
-  problem: string;
-  contribution: string;
-  result: string;
-  media: 'interface' | 'systems' | 'delivery';
+  // Ink colour for the halftone placeholder until a screenshot exists.
+  ink: 'blue' | 'pink' | 'ink';
+  image?: { src: string; alt: string };
 };
 
 export type ContactLink = {
   label: string;
   href: string;
   value: string;
-  icon: ComponentType<{ className?: string }>;
+  // Links with an icon also appear in the footer.
+  icon?: 'github' | 'linkedin';
 };
 
 export type ExperienceRole = {
@@ -46,30 +33,26 @@ export type ExperienceRole = {
 
 export const siteConfig = {
   name: 'Michael Grier',
-  role: 'Software Developer',
+  role: 'Software developer',
   url: 'https://michaelgrier.dev',
   hero: {
     greeting: "Hi, I'm Michael.",
-    rolePrefix: "I'm a",
-    roleHighlight: 'software developer',
+    subtitle: 'Software developer in Calgary.',
     intro:
-      'I build polished user interfaces and full-stack web applications with a focus on usability, performance, and maintainable architecture.',
+      'I build polished user interfaces and full-stack web applications, with a focus on usability, performance, and architecture that stays maintainable.',
   },
-  location: 'Canada',
-  availability: 'Open to software development opportunities',
+  location: 'Calgary',
+  availability: 'Open to new roles',
 };
 
-export const heroHeadline = [
-  siteConfig.hero.greeting,
-  `${siteConfig.hero.rolePrefix} ${siteConfig.hero.roleHighlight}`,
-].join(' ');
+export const heroHeadline = `${siteConfig.hero.greeting} ${siteConfig.hero.subtitle}`;
 
 export const navItems: NavItem[] = [
-  { label: 'Home', href: '/', icon: Home },
-  { label: 'Resume', href: '/resume', icon: FileText },
-  { label: 'Projects', href: '/projects', icon: BriefcaseBusiness },
-  { label: 'About', href: '/about', icon: UserRound },
-  { label: 'Contact', href: '/contact', icon: MessageCircle },
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'About', href: '/about' },
+  { label: 'Resume', href: '/resume' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const contactLinks: ContactLink[] = [
@@ -77,33 +60,25 @@ export const contactLinks: ContactLink[] = [
     label: 'Email',
     href: 'mailto:hello@example.com',
     value: 'hello@example.com',
-    icon: Mail,
   },
   {
     label: 'GitHub',
     href: 'https://github.com/michael-grier',
     value: 'github.com/michael-grier',
-    icon: Code2,
+    icon: 'github',
   },
   {
     label: 'LinkedIn',
     href: 'https://linkedin.com/in/example',
     value: 'linkedin.com/in/example',
-    icon: Network,
+    icon: 'linkedin',
   },
 ];
 
 export const skillGroups = [
   {
     label: 'Frontend',
-    skills: [
-      'React',
-      'Next.js',
-      'Vite',
-      'TypeScript',
-      'Material UI',
-      'shadcn/ui',
-    ],
+    skills: ['React', 'Next.js', 'Vite', 'TypeScript', 'Material UI', 'shadcn/ui'],
   },
   {
     label: 'Backend',
@@ -158,59 +133,61 @@ export const educationItems = [
   },
   {
     label: 'Working habits',
-    value:
-      'Small commits, clear scope, accessible interfaces, build verification',
+    value: 'Small commits, clear scope, accessible interfaces, build verification',
   },
 ];
 
 export const featuredProjects: Project[] = [
   {
-    title: 'Project Alpha',
-    summary:
-      'A full-stack product interface focused on fast workflows, clear information hierarchy, and dependable interactions.',
-    year: '2026',
-    stack: ['Next.js', 'React', 'TypeScript'],
-    status: 'Case study',
-    role: 'Product UI / frontend architecture',
-    problem:
-      'Operational workflows needed a calmer interface that made status, priority, and next actions easier to scan.',
-    contribution:
-      'I designed the page structure, reusable components, responsive states, and typed data boundaries for the primary user flow.',
-    result:
-      'The result is a faster-feeling product surface with clearer hierarchy, fewer ambiguous states, and room for future workflow depth.',
-    media: 'interface',
+    title: 'Fuckers HQ',
+    tagline: 'Storefront for independently sold skate goods. Next.js, Postgres, Stripe.',
+    repo: 'https://github.com/michael-grier/fuckers-hq',
+    summary: [
+      "A small shop that has to be trustworthy without a team behind it. Guest checkout runs through Stripe, but prices and stock are re-read from Postgres and reserved atomically before a payment session exists, so the store can never oversell. Orders are only created when Stripe's webhook confirms payment.",
+      'Refunds, disputes, local delivery, and confirmation emails each have durable state that can be retried, and an admin surface for products, orders, and shipping rates keeps day-to-day running to a few screens.',
+    ],
+    stack: [
+      'Next.js',
+      'Neon Postgres',
+      'Drizzle',
+      'Stripe Checkout and Tax',
+      'Clerk',
+      'Cloudflare R2',
+      'Resend',
+      'Sentry',
+    ],
+    ink: 'blue',
   },
   {
-    title: 'Project Beacon',
-    summary:
-      'A developer-facing tool with polished dashboard surfaces, typed data flows, and deployment-ready architecture.',
-    year: '2026',
-    stack: ['Node.js', 'PostgreSQL', 'Tailwind'],
-    status: 'In progress',
-    role: 'Full-stack implementation',
-    problem:
-      'Developers needed a compact view of system health, integration status, and follow-up work without noisy dashboard chrome.',
-    contribution:
-      'I modeled the data flow, shaped the dashboard UI, and mapped the interaction states for empty, loading, and review moments.',
-    result:
-      'The result is a focused technical tool with practical implementation boundaries and a cleaner path to production hardening.',
-    media: 'systems',
+    title: 'YYC Skate Spots',
+    tagline: 'Street spot book for Calgary. iOS and Android.',
+    repo: 'https://github.com/michael-grier/yyc-skate-spots',
+    summary: [
+      'A map of skate spots in the city, added by the people who skate them. Anyone can contribute a spot with photos and a location; new and edited spots wait for review before they appear publicly, and repeat problems lead to a contribution ban, so the map stays useful without a full-time moderator.',
+      "Spots have share links that open the app when it's installed and fall back to a web page when it isn't. Distance filtering is a client-side haversine over one reactive query, which is all a one-city dataset needs.",
+    ],
+    stack: [
+      'Expo',
+      'React Native',
+      'Expo Router',
+      'Convex',
+      'Clerk',
+      'Google Maps',
+      'EAS',
+      'Cloudflare Pages',
+    ],
+    ink: 'pink',
   },
   {
-    title: 'Project Current',
-    summary:
-      'A responsive web experience combining media-rich project storytelling with pragmatic engineering details.',
-    year: '2025',
-    stack: ['React', 'Motion', 'Vercel'],
-    status: 'Live',
-    role: 'Interface engineering / motion',
-    problem:
-      'Project work needed to feel inspectable and credible while still carrying enough visual energy to be memorable.',
-    contribution:
-      'I built responsive media sections, restrained motion, content structure, and reusable presentation patterns.',
-    result:
-      'The result is a project page pattern that balances visual polish with concrete implementation context.',
-    media: 'delivery',
+    title: 'Code Trainer',
+    tagline: 'Interview prep for full-stack TypeScript engineers, in the browser.',
+    repo: 'https://github.com/michael-grier/code-trainer',
+    summary: [
+      'A track-based curriculum of short lessons with practice attached to every one: algorithms, runtime behaviour, the type system, React, backend TypeScript, and production readiness. Code runs and is graded in the browser, deterministically where that is honest and through structured self-review where it is not.',
+      'Progress is kept in localStorage for guests and synced through Convex once you sign in, so the backend stays limited to auth and progress and the learning runtime stays client-side.',
+    ],
+    stack: ['React', 'Vite', 'TypeScript', 'Tailwind', 'Monaco', 'Convex', 'Clerk'],
+    ink: 'ink',
   },
 ];
 
@@ -218,23 +195,23 @@ export const aboutPrinciples = [
   {
     label: 'Product clarity',
     description:
-      'I care about whether an interface helps someone make the next decision quickly, not just whether it looks finished.',
+      'Whether an interface helps someone make the next decision quickly, not just whether it looks finished.',
   },
   {
     label: 'Maintainable pace',
     description:
-      'I prefer small, verifiable changes with clear ownership boundaries over clever code that becomes expensive to revisit.',
+      'Small, verifiable changes with clear ownership over clever code that gets expensive to revisit.',
   },
   {
     label: 'Practical polish',
     description:
-      'Motion, spacing, copy, and state design all matter when they make the product easier to trust and easier to use.',
+      'Motion, spacing, copy, and state design matter when they make a product easier to trust.',
   },
 ];
 
 export const workingStyle = [
   'Clarify the user flow and success criteria before writing much code.',
   'Build the smallest useful version, then tighten edge cases and interaction quality.',
-  'Keep implementation details visible through readable code, typed contracts, and focused verification.',
-  'Commit regularly at meaningful checkpoints so the work stays reviewable.',
+  'Keep implementation visible through readable code, typed contracts, and focused verification.',
+  'Commit at meaningful checkpoints so the work stays reviewable.',
 ];
