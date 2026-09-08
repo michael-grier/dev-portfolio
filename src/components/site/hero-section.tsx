@@ -52,8 +52,8 @@ export function HeroSection() {
               <Link href="/projects">View projects</Link>
             </Button>
             <a
-              href="/resume.pdf"
-              download
+              href="/Michael_Grier_Resume.pdf"
+              download="Michael_Grier_Resume.pdf"
               className="text-ink underline decoration-ink/30 underline-offset-4 outline-none transition-colors hover:text-blue hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
             >
               Resume

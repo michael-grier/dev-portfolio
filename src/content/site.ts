@@ -23,14 +23,6 @@ export type ContactLink = {
   icon?: 'github' | 'linkedin';
 };
 
-export type ExperienceRole = {
-  title: string;
-  organization: string;
-  period: string;
-  summary: string;
-  bullets: string[];
-};
-
 export const siteConfig = {
   name: 'Michael Grier',
   role: 'Software developer',
@@ -75,72 +67,10 @@ export const contactLinks: ContactLink[] = [
   },
 ];
 
-export const skillGroups = [
-  {
-    label: 'Frontend',
-    skills: ['React', 'Next.js', 'Vite', 'TypeScript', 'Material UI', 'shadcn/ui'],
-  },
-  {
-    label: 'Backend',
-    skills: ['Node.js', 'Bun', 'API design', 'full-stack architecture'],
-  },
-  {
-    label: 'Data & auth',
-    skills: ['PostgreSQL', 'Databricks', 'Clerk', 'Neon', 'Drizzle', 'Zod', 'Convex'],
-  },
-];
-
-export const resumeSummary = [
-  'Product-minded software developer focused on polished React interfaces, typed application architecture, and dependable delivery habits.',
-  'Strong fit for teams that need someone comfortable moving between UI details, data flow, API contracts, and pragmatic shipping tradeoffs.',
-];
-
-export const experienceRoles: ExperienceRole[] = [
-  {
-    title: 'Software Developer',
-    organization: 'Independent projects',
-    period: '2025 - Present',
-    summary:
-      'Building portfolio-ready full-stack web projects with modern React, Next.js, typed APIs, and deployment-focused delivery practices.',
-    bullets: [
-      'Designed reusable interface patterns for dashboards, content-heavy pages, and workflow tools.',
-      'Implemented responsive layouts, animation systems, and component states across mobile and desktop breakpoints.',
-      'Documented technical decisions and project scope so future iterations stay easy to reason about.',
-    ],
-  },
-  {
-    title: 'Full-stack project work',
-    organization: 'Recent builds',
-    period: '2024 - 2025',
-    summary:
-      'Delivered practical application features across frontend, backend, data modeling, auth flows, and production-readiness checks.',
-    bullets: [
-      'Connected UI flows to typed data models and API boundaries with clear validation paths.',
-      'Improved product usability through tighter hierarchy, loading states, empty states, and error handling.',
-      'Used linting, build verification, and focused manual QA to reduce regressions before release.',
-    ],
-  },
-];
-
-export const educationItems = [
-  {
-    label: 'Core focus',
-    value: 'Frontend systems, full-stack foundations, product engineering',
-  },
-  {
-    label: 'Current stack',
-    value: 'Next.js, React, TypeScript, Tailwind CSS, Node.js',
-  },
-  {
-    label: 'Working habits',
-    value: 'Small commits, clear scope, accessible interfaces, build verification',
-  },
-];
-
 export const featuredProjects: Project[] = [
   {
-    title: 'Fuckers HQ',
-    tagline: 'Storefront for independently sold skate goods. Next.js, Postgres, Stripe.',
+    title: 'Fuckers Skateboards',
+    tagline: 'Storefront for independently sold skateboard goods. Next.js, Postgres, Stripe.',
     repo: 'https://github.com/michael-grier/fuckers-hq',
     summary: [
       "A small shop that has to be trustworthy without a team behind it. Guest checkout runs through Stripe, but prices and stock are re-read from Postgres and reserved atomically before a payment session exists, so the store can never oversell. Orders are only created when Stripe's webhook confirms payment.",
@@ -186,7 +116,7 @@ export const featuredProjects: Project[] = [
       'A track-based curriculum of short lessons with practice attached to every one: algorithms, runtime behaviour, the type system, React, backend TypeScript, and production readiness. Code runs and is graded in the browser, deterministically where that is honest and through structured self-review where it is not.',
       'Progress is kept in localStorage for guests and synced through Convex once you sign in, so the backend stays limited to auth and progress and the learning runtime stays client-side.',
     ],
-    stack: ['React', 'Vite', 'TypeScript', 'Tailwind', 'Monaco', 'Convex', 'Clerk'],
+    stack: ['React', 'Vite', 'TypeScript', 'Tailwind', 'Monaco', 'Convex', 'Better Auth'],
     ink: 'ink',
   },
 ];
