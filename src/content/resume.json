@@ -68,18 +68,18 @@
   ],
   "projects": [
     {
+      "name": "Skateboard Ecommerce Platform",
+      "description": "Checkout, inventory, and order management for an independent skateboard brand",
+      "href": "https://github.com/michael-grier/fuckers-hq",
+      "stack": "Next.js, Stripe, Neon PostgreSQL, Drizzle, Cloudflare R2, Playwright",
+      "bullet": "Built checkout with server-validated pricing and atomic inventory reservations, retry-safe payment processing, and order management. Added end-to-end tests for price tampering, duplicate payments, and stock release."
+    },
+    {
       "name": "YYC Skate Spots",
       "description": "Community skateboarding map for Calgary",
       "href": "https://github.com/michael-grier/yyc-skate-spots",
       "stack": "React Native, Expo, Convex, Clerk, Google Maps, EAS",
       "bullet": "Built a mobile spot book with map clustering, location filters, photo submissions, favourites, and moderation. Added share links with a web fallback and prepared the iOS release configuration and store submission."
-    },
-    {
-      "name": "Fuckers Skateboards",
-      "description": "Ecommerce platform for skateboard goods",
-      "href": "https://github.com/michael-grier/fuckers-hq",
-      "stack": "Next.js, Stripe, Neon PostgreSQL, Drizzle, Cloudflare R2, Playwright",
-      "bullet": "Built checkout with server-validated pricing and atomic inventory reservations, retry-safe payment processing, and order management. Added end-to-end tests for price tampering, duplicate payments, and stock release."
     },
     {
       "name": "Code Trainer",
