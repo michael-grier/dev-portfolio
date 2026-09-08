@@ -139,7 +139,7 @@ def lightburst(paragraph, width):
 
 def build(output):
     """Lay out a two-page resume with experience first and projects on page two."""
-    data = json.loads((ROOT / "src/content/resume.json").read_text())
+    data = json.loads((ROOT / "src/content/resume.json").read_text(encoding="utf-8"))
     doc = Document()
     section = doc.sections[0]
     section.page_width = Inches(8.5)
