@@ -1,0 +1,103 @@
+{
+  "name": "Michael Grier",
+  "title": "Software developer",
+  "location": "Calgary, AB",
+  "email": "michael.c.grier@gmail.com",
+  "phone": "403-969-8220",
+  "github": "https://github.com/michael-grier",
+  "summary": "Full-stack software developer with five years at TransAlta building renewable-energy reporting tools and business process automation. Co-led a reporting and data-governance platform and maintained a wind, solar, and hydro operations app, working across React interfaces, APIs, databases, and Azure infrastructure. Independent projects include ecommerce, a native mobile app, and browser-based developer tools.",
+  "experience": [
+    {
+      "title": "Software Developer",
+      "organization": "TransAlta",
+      "location": "Calgary",
+      "period": "June 2023 to June 2026",
+      "products": [
+        {
+          "name": "AthenaOS",
+          "description": "Production reporting and data governance",
+          "bullets": [
+            "Co-led development of a Next.js and TypeScript platform that lets SQL-fluent analysts assemble wind and hydro reporting dashboards without writing React.",
+            "Built reusable ECharts cards and chart presets, plus a data-catalog workflow with draft submissions, multi-stage review, rework, and audit trails.",
+            "Implemented Microsoft Entra ID SSO, PostgreSQL-backed sessions, and distributed locking for token refresh across application instances.",
+            "Built Terraform and GitHub Actions delivery workflows across development, UAT, and production, including release promotion, hotfixes, and rollback."
+          ]
+        },
+        {
+          "name": "GenOS",
+          "description": "Wind, solar, and hydro operations",
+          "bullets": [
+            "Migrated event data from REST to GraphQL and replaced a 1,700-line shared React component with focused wind, solar, and hydro modules.",
+            "Built reusable mobile and tablet modals for event details and monitoring graphs; established Docker builds and Azure Pipelines across three environments.",
+            "Fixed SQL Server connection leaks and strengthened JWT verification. Corrected capacity values, event filtering, and multi-unit CSV exports used in NERC reporting."
+          ]
+        }
+      ],
+      "bullets": []
+    },
+    {
+      "title": "Junior Automation Developer",
+      "organization": "TransAlta",
+      "location": "Calgary",
+      "period": "June 2021 to May 2023",
+      "products": [],
+      "bullets": [
+        "Developed and maintained Blue Prism automations, from stakeholder requirements and reusable process components to testing, scheduled execution, and troubleshooting deployed bots."
+      ]
+    },
+    {
+      "title": "Freelance Software Developer",
+      "organization": "Self-employed",
+      "location": "Calgary",
+      "period": "February 2021 to June 2021",
+      "products": [],
+      "bullets": [
+        "Led frontend design and development for a Django web project and supported Unity mobile game development."
+      ]
+    },
+    {
+      "title": "Frontend Web Developer Intern",
+      "organization": "Invigulus",
+      "location": "Remote",
+      "period": "November 2020 to December 2020",
+      "products": [],
+      "bullets": [
+        "Built a React application connected to a REST API and NoSQL database, giving employees a web interface for data entry and retrieval."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Skateboard Ecommerce Platform",
+      "description": "Checkout, inventory, and order management for an independent skateboard brand",
+      "href": "https://github.com/michael-grier/fuckers-hq",
+      "stack": "Next.js, Stripe, Neon PostgreSQL, Drizzle, Cloudflare R2, Playwright",
+      "bullet": "Built checkout with server-validated pricing and atomic inventory reservations, retry-safe payment processing, and order management. Added end-to-end tests for price tampering, duplicate payments, and stock release."
+    },
+    {
+      "name": "YYC Skate Spots",
+      "description": "Community skateboarding map for Calgary",
+      "href": "https://github.com/michael-grier/yyc-skate-spots",
+      "stack": "React Native, Expo, Convex, Clerk, Google Maps, EAS",
+      "bullet": "Built a mobile spot book with map clustering, location filters, photo submissions, favourites, and moderation. Added share links with a web fallback and prepared the iOS release configuration and store submission."
+    },
+    {
+      "name": "Code Trainer",
+      "description": "Interactive TypeScript interview practice",
+      "href": "https://github.com/michael-grier/code-trainer",
+      "stack": "React, Vite, Monaco Editor, Web Workers, Convex, Better Auth, Vitest",
+      "bullet": "Built a browser-based coding workspace with isolated execution, TypeScript checking, and automated grading. Combined lessons and exercises with local guest progress and account-based synchronization across devices."
+    }
+  ],
+  "skills": [
+    { "label": "Frontend and mobile", "items": ["TypeScript", "JavaScript", "React", "Next.js", "React Native", "Expo", "Tailwind CSS", "Material UI", "shadcn/ui", "ECharts"] },
+    { "label": "Backend and data", "items": ["Node.js", "Express", "REST", "GraphQL", "PostgreSQL", "SQL Server", "Databricks", "Convex", "Drizzle", "Zod", "Python", "FastAPI"] },
+    { "label": "Cloud and integrations", "items": ["Azure", "Terraform", "Docker", "GitHub Actions", "Azure Pipelines", "Stripe", "Cloudflare R2", "Microsoft Entra ID", "Clerk", "Better Auth"] },
+    { "label": "Testing and tools", "items": ["Playwright", "Vitest", "Jest", "React Testing Library", "Bun", "Blue Prism"] }
+  ],
+  "education": [
+    { "qualification": "Object-Oriented Software Development Certificate", "institution": "Southern Alberta Institute of Technology", "detail": "2020 · GPA 3.98" },
+    { "qualification": "Bachelor of Education", "institution": "University of Calgary", "detail": "2016" },
+    { "qualification": "Bachelor of Arts", "institution": "University of Calgary", "detail": "2011" }
+  ]
+}
