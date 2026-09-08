@@ -26,6 +26,9 @@ export default function ResumePage() {
             <a href={`mailto:${resume.email}`} className={textLink}>
               {resume.email}
             </a>
+            <a href={resume.github} className={textLink}>
+              GitHub: {resume.github.replace("https://github.com/", "")}
+            </a>
           </address>
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
             <Button asChild size="lg" className="h-11 px-5 text-[15px]">

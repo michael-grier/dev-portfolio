@@ -9,11 +9,16 @@ With Python and `python-docx` available:
 python3 scripts/build-resume.py
 ```
 
-This writes `public/Michael_Grier_Resume.docx`. Export it as a tagged PDF to `public/Michael_Grier_Resume.pdf`
-using Word or LibreOffice. The Codex document skill's `render_docx.py --emit_pdf`
-can also export the PDF and render page images for inspection. Check both pages
-for clipping, page breaks, working links, and readable text before replacing the
-public PDF. The site build does not regenerate these files.
+This writes `public/Michael_Grier_Resume.docx`. From the repository root, export
+it as a tagged PDF with LibreOffice:
+
+```sh
+soffice --headless --convert-to 'pdf:writer_pdf_Export:{"UseTaggedPDF":{"type":"boolean","value":"true"}}' --outdir public public/Michael_Grier_Resume.docx
+```
+
+Close other LibreOffice windows before running the command so it starts a
+headless process. Check both pages for clipping, page breaks, working links, and
+readable text after exporting. The site build does not regenerate these files.
 
 The document embeds regular and bold instances of Familjen Grotesk, matching the
 portfolio font. The files in `resume-assets/` were instantiated at weights 400 and

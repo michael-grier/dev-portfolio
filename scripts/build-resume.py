@@ -189,7 +189,10 @@ def build(output):
     link(contact, data["email"], "mailto:" + data["email"])
     contact.add_run("  |  ")
     contact.add_run(data["phone"])
-    contact.paragraph_format.space_after = Pt(12)
+    profiles = doc.add_paragraph(style="Contact")
+    profiles.add_run("GitHub: ")
+    link(profiles, data["github"].removeprefix("https://"), data["github"])
+    profiles.paragraph_format.space_after = Pt(12)
     doc.add_paragraph(data["summary"])
     heading(doc, "Experience")
     for role in data["experience"]:
