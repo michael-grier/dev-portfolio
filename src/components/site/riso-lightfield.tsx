@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 // The lightfield as a two-colour risograph print: the same rays printed once
 // in pink and once in blue, a hair out of register, the inks multiplying on
-// the paper. Solid ink per plate; alpha alone carries the tint.
+// the paper. Solid ink per plate; alpha alone carries the tint. The blue
+// plate's flash lags the pink one, as a second pass through the machine.
 const PINK: LightfieldPalette = {
   core: "255, 72, 176",
   near: "255, 72, 176",
@@ -32,6 +33,7 @@ type RisoLightfieldProps = {
 // Both plates overhang the container so the nudged, rotated blue plate still
 // covers every edge; otherwise the pink plate shows alone in thin slivers.
 const plateClassName = "inset-[-3%] h-[106%] w-[106%] mix-blend-multiply";
+const BLUE_PLATE_LAG_MS = 100;
 
 export function RisoLightfield({ className, ...plate }: RisoLightfieldProps) {
   return (
@@ -52,6 +54,7 @@ export function RisoLightfield({ className, ...plate }: RisoLightfieldProps) {
           plateClassName,
           "translate-x-[4px] -translate-y-[3px] rotate-[0.7deg]"
         )}
+        introDelay={BLUE_PLATE_LAG_MS}
         {...plate}
       />
     </div>
