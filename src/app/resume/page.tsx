@@ -63,7 +63,9 @@ export default function ResumePage() {
                   </p>
                   {role.products.map((product) => (
                     <section key={product.name} className="mt-8">
-                      <h4 className="text-xl font-medium">{product.name}</h4>
+                      <h4 className="text-xl font-medium">
+                        Project: {product.name}
+                      </h4>
                       <p className="mt-1 text-sm text-ink/65">
                         {product.description}
                       </p>

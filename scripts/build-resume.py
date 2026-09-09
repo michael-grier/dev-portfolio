@@ -196,11 +196,13 @@ def build(output):
     doc.add_paragraph(data["summary"])
     heading(doc, "Experience")
     for role in data["experience"]:
-        doc.add_paragraph(role["title"], "Heading 2")
+        role_heading = doc.add_paragraph(role["title"], "Heading 2")
+        role_heading.paragraph_format.space_before = Pt(4)
+        role_heading.paragraph_format.space_after = Pt(2)
         doc.add_paragraph(f'{role["organization"]}, {role["location"]}  |  {role["period"]}', "Detail")
         for product in role["products"]:
             paragraph = doc.add_paragraph(style="Heading 3")
-            paragraph.add_run(product["name"])
+            paragraph.add_run(f'Project: {product["name"]}')
             detail = paragraph.add_run("  |  " + product["description"])
             detail.bold = False
             detail.font.size = Pt(9.5)
