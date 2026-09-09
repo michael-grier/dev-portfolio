@@ -11,8 +11,8 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
-  // Copy waits for the ink flood to settle.
-  const contentDelay = shouldReduceMotion ? 0 : 1.25;
+  // Copy rises once the ink flood has crested and started to drain.
+  const contentDelay = shouldReduceMotion ? 0 : 1.9;
   const initial = shouldReduceMotion ? false : { opacity: 0, y: 8 };
 
   return (
