@@ -51,13 +51,12 @@ export function HeroSection() {
             <Button asChild size="lg" className="h-11 px-5 text-[15px]">
               <Link href="/projects">View projects</Link>
             </Button>
-            <a
-              href="/Michael_Grier_Resume.pdf"
-              download="Michael_Grier_Resume.pdf"
+            <Link
+              href="/resume"
               className="text-ink underline decoration-ink/30 underline-offset-4 outline-none transition-colors hover:text-blue hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
             >
               Resume
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>
