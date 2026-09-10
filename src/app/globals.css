@@ -81,7 +81,8 @@
   --chart-3: #5f5c57;
   --chart-4: #1c1c1c;
   --chart-5: #e6e2da;
-  --radius: 0.125rem;
+  /* 8px, matching the photo corners. Only the shadcn button reads this today. */
+  --radius: 0.5rem;
   --sidebar: #f6f4ef;
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--ink);
