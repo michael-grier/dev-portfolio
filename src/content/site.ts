@@ -29,9 +29,9 @@ export const siteConfig = {
   url: 'https://michaelgrier.dev',
   hero: {
     greeting: "Hi, I'm Michael.",
-    subtitle: 'Software developer in Calgary.',
+    subtitle: 'A software developer in Calgary.',
     intro:
-      'I build polished user interfaces and full-stack web applications, with a focus on usability, performance, and architecture that stays maintainable.',
+      'I build polished user interfaces and full-stack applications, with a focus on usability, performance, maintainable architecture, and modern toolsets.',
   },
   location: 'Calgary',
   availability: 'Open to new roles',
@@ -50,8 +50,8 @@ export const navItems: NavItem[] = [
 export const contactLinks: ContactLink[] = [
   {
     label: 'Email',
-    href: 'mailto:hello@example.com',
-    value: 'hello@example.com',
+    href: 'mailto:michael.c.grier@gmail.com',
+    value: 'michael.c.grier@gmail.com',
   },
   {
     label: 'GitHub',
@@ -61,8 +61,8 @@ export const contactLinks: ContactLink[] = [
   },
   {
     label: 'LinkedIn',
-    href: 'https://linkedin.com/in/example',
-    value: 'linkedin.com/in/example',
+    href: 'https://www.linkedin.com/in/michael-c-grier/',
+    value: 'linkedin.com/in/michael-c-grier',
     icon: 'linkedin',
   },
 ];
@@ -70,11 +70,13 @@ export const contactLinks: ContactLink[] = [
 export const featuredProjects: Project[] = [
   {
     title: 'Fuckers Skateboards',
-    tagline: 'Storefront for independently sold skateboard goods. Next.js, Postgres, Stripe.',
+    tagline: 'Storefront for a local, independent skateboard brand. Next.js, Postgres, Stripe.',
     repo: 'https://github.com/michael-grier/fuckers-hq',
     summary: [
-      "A small shop that has to be trustworthy without a team behind it. Guest checkout runs through Stripe, but prices and stock are re-read from Postgres and reserved atomically before a payment session exists, so the store can never oversell. Orders are only created when Stripe's webhook confirms payment.",
-      'Refunds, disputes, local delivery, and confirmation emails each have durable state that can be retried, and an admin surface for products, orders, and shipping rates keeps day-to-day running to a few screens.',
+      "An e-commerce site for a small local skateboard brand with nobody on staff to manage it full-time, so correctness had to come from the design rather than from someone watching.",
+      "Guest checkout runs through Stripe, but prices and stock are re-read from Postgres and reserved under row locks before a payment session exists, so the store can never oversell. Every checkout carries an idempotency key, so a retried request converges on the same reservation, and a cron worker recovers reservations whose Stripe session creation failed mid-flight.",
+      "Orders exist only once Stripe's webhook confirms payment. Webhook events are stored exactly once and refund and dispute state is derived from them, so late or out-of-order events converge on the right answer. Confirmation emails go through a retrying outbox. An admin surface for products, orders, local delivery, and shipping rates keeps day-to-day running to a few screens.",
+      'Tested with over 400 cases, including concurrency suites that run against a real Postgres instance and Playwright flows against test-mode Stripe and Clerk. CI runs audit, lint, typecheck, tests, and a full build on every PR, and production deploys only after migrations succeed against a verified database.',
     ],
     stack: [
       'Next.js',
@@ -93,8 +95,10 @@ export const featuredProjects: Project[] = [
     tagline: 'Street spot book for Calgary. iOS and Android.',
     repo: 'https://github.com/michael-grier/yyc-skate-spots',
     summary: [
-      'A map of skate spots in the city, added by the people who skate them. Anyone can contribute a spot with photos and a location; new and edited spots wait for review before they appear publicly, and repeat problems lead to a contribution ban, so the map stays useful without a full-time moderator.',
-      "Spots have share links that open the app when it's installed and fall back to a web page when it isn't. Distance filtering is a client-side haversine over one reactive query, which is all a one-city dataset needs.",
+      "A mobile app designed to help the Calgary skateboarding community find and share street spots.",
+      "New and edited spots wait for review before they appear publicly. Review state lives apart from the spot itself so a contributor's edit can't overwrite a moderator's decision, removals accumulate strikes, and repeat problems lead to a contribution ban that keeps sign-in intact. Every moderation action is authorized server-side against a role claim, never trusted from the client.",
+      "Photos are downscaled on-device before an authenticated upload records who owns them. Share links open the app when it's installed and fall back to a static web page when it isn't. Distance filtering is a client-side haversine over one reactive query, which is all a one-city dataset needs.",
+      'Shipped to the App Store with a hand-authored privacy manifest, Sign in with Apple, and retry-safe account deletion. CI typechecks, lints, runs 177 backend and component tests, and verifies the iOS release configuration before every export.',
     ],
     stack: [
       'Expo',
@@ -113,8 +117,9 @@ export const featuredProjects: Project[] = [
     tagline: 'Interview prep for full-stack TypeScript engineers, in the browser.',
     repo: 'https://github.com/michael-grier/code-trainer',
     summary: [
-      'A track-based curriculum of short lessons with practice attached to every one: algorithms, runtime behaviour, the type system, React, backend TypeScript, and production readiness. Code runs and is graded in the browser, deterministically where that is honest and through structured self-review where it is not.',
-      'Progress is kept in localStorage for guests and synced through Convex once you sign in, so the backend stays limited to auth and progress and the learning runtime stays client-side.',
+      "60 lessons and over 240 problems across algorithms, runtime behaviour, the type system, React, backend TypeScript, and testing and production readiness.",
+      "Code runs in a sandboxed iframe with no same-origin access, one Web Worker per run, and hard timeouts, so a runaway loop dies with its worker instead of hanging the page. Grading is deterministic where that is honest, including running the real TypeScript compiler in a worker for type problems and driving React components through scripted interactions, and structured self-review where it is not.",
+      "Progress is kept in localStorage for guests and merged per-field into Convex once you sign in, so the backend stays limited to auth and progress and the learning runtime stays client-side. Every lesson ships with a test that runs its reference solution against its own cases, so the curriculum can't drift from the grader. Nearly 400 tests in total, with Playwright covering the sandbox across three browsers.",
     ],
     stack: ['React', 'Vite', 'TypeScript', 'Tailwind', 'Monaco', 'Convex', 'Better Auth'],
     ink: 'ink',

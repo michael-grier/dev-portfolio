@@ -42,7 +42,7 @@ export default function ProjectsPage() {
   return (
     <PageShell
       title="Things I've built."
-      intro="Two apps for the skate scene I'm part of, and a tool for the work itself. What each one had to get right, and what I built to do it."
+      intro="I love building things that help support the communities, pursuits, and people that matter to me. Here's some of the projects that I have been working on recently."
     >
       <div className="divide-y divide-ink/12 border-y border-ink/12">
         {featuredProjects.map((project) => (
