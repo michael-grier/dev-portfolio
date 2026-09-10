@@ -22,7 +22,7 @@ function ProjectMedia({ project }: { project: Project }) {
 
   return (
     <div
-      className="halftone aspect-video rounded-sm"
+      className="halftone aspect-video rounded-[8px]"
       style={{ "--dot": inkColors[project.ink] } as React.CSSProperties}
     />
   );

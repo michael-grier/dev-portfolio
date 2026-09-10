@@ -14,6 +14,12 @@ import addSpot from '@/assets/projects/yyc-skate-spots/add-spot.webp';
 import pendingReview from '@/assets/projects/yyc-skate-spots/pending-review.webp';
 import profile from '@/assets/projects/yyc-skate-spots/profile.webp';
 import signIn from '@/assets/projects/yyc-skate-spots/sign-in.webp';
+import curriculum from '@/assets/projects/code-trainer/curriculum.webp';
+import lesson from '@/assets/projects/code-trainer/lesson.webp';
+import codeProblem from '@/assets/projects/code-trainer/code-problem.webp';
+import refactorChecks from '@/assets/projects/code-trainer/refactor-checks.webp';
+import writtenReview from '@/assets/projects/code-trainer/written-review.webp';
+import trainerSignIn from '@/assets/projects/code-trainer/sign-in.webp';
 
 // Types
 
@@ -203,6 +209,14 @@ export const featuredProjects: Project[] = [
     ],
     stack: ['React', 'Vite', 'TypeScript', 'Tailwind', 'Monaco', 'Convex', 'Better Auth'],
     ink: 'ink',
+    images: [
+      { src: curriculum, alt: 'Dashboard with the next lesson queued, the curriculum listed by track, and progress synced to a GitHub account.' },
+      { src: lesson, alt: 'A lesson on narrowing, unions, and discriminated unions, with a worked example, compiler output, and its practice problems.' },
+      { src: codeProblem, alt: 'A coding problem with the prompt, sample input and output, the solution editor, and a results panel.' },
+      { src: refactorChecks, alt: 'A refactor problem with failing static checks, the refactor goals, and the code to change.' },
+      { src: writtenReview, alt: 'A written problem with an answer box, a hidden reference answer, and a rubric to review against.' },
+      { src: trainerSignIn, alt: 'Sign-in dialog offering to connect GitHub so progress follows you, or to keep learning locally.' },
+    ],
   },
 ];
 
