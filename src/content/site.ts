@@ -1,3 +1,16 @@
+import type { StaticImageData } from 'next/image';
+
+import homepage from '@/assets/projects/fuckers-hq/homepage.webp';
+import shop from '@/assets/projects/fuckers-hq/shop.webp';
+import cart from '@/assets/projects/fuckers-hq/cart.webp';
+import products from '@/assets/projects/fuckers-hq/products.webp';
+import editor from '@/assets/projects/fuckers-hq/editor.webp';
+
+export type ProjectImage = {
+  src: StaticImageData;
+  alt: string;
+};
+
 export type NavItem = {
   label: string;
   href: string;
@@ -12,7 +25,7 @@ export type Project = {
   stack: string[];
   // Ink colour for the halftone placeholder until a screenshot exists.
   ink: 'blue' | 'pink' | 'ink';
-  image?: { src: string; alt: string };
+  images?: ProjectImage[];
 };
 
 export type ContactLink = {
@@ -87,6 +100,13 @@ export const featuredProjects: Project[] = [
       'Sentry',
     ],
     ink: 'blue',
+    images: [
+      { src: homepage, alt: 'Fuckers Skateboards homepage with a skate video hero and links to the shop and videos.' },
+      { src: shop, alt: 'Shop catalog with product photos, prices, search, sorting, and filters.' },
+      { src: cart, alt: 'Shopping cart drawer with size selections, quantity controls, and shipping or local delivery options.' },
+      { src: products, alt: 'Product admin showing the catalog, publishing status, and stock warnings.' },
+      { src: editor, alt: 'Product editor with details, publishing controls, inventory totals, and photo management.' },
+    ],
   },
   {
     title: 'YYC Skate Spots',

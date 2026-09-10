@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { ImageCarousel } from "@/components/site/image-carousel";
 import { PageShell } from "@/components/site/page-shell";
 import { featuredProjects, type Project } from "@/content/site";
 
@@ -16,17 +15,9 @@ const inkColors: Record<Project["ink"], string> = {
 };
 
 function ProjectMedia({ project }: { project: Project }) {
-  if (project.image) {
+  if (project.images?.length) {
     return (
-      <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-ink/14">
-        <Image
-          src={project.image.src}
-          alt={project.image.alt}
-          fill
-          sizes="(min-width: 1024px) 40vw, 100vw"
-          className="object-cover"
-        />
-      </div>
+      <ImageCarousel images={project.images} name={project.title} />
     );
   }
 
@@ -41,6 +32,7 @@ function ProjectMedia({ project }: { project: Project }) {
 export default function ProjectsPage() {
   return (
     <PageShell
+      contentClassName="max-w-[95rem]"
       title="Things I've built."
       intro="Two apps for the skate scene I'm part of, and a tool for the work itself. What each one had to get right, and what I built to do it."
     >
@@ -48,11 +40,11 @@ export default function ProjectsPage() {
         {featuredProjects.map((project) => (
           <article
             key={project.title}
-            className="grid gap-8 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14"
+            className="grid gap-7 py-8 md:py-12 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] xl:gap-12"
           >
             <ProjectMedia project={project} />
             <div>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <div>
                 <h2 className="text-3xl font-medium tracking-[-0.01em]">
                   {project.title}
                 </h2>
@@ -60,18 +52,18 @@ export default function ProjectsPage() {
                   href={project.repo}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
+                  className="mt-3 inline-block text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
                 >
                   {project.repo.replace("https://", "")}
                 </a>
               </div>
-              <p className="mt-2 text-sm text-ink/55">{project.tagline}</p>
-              <div className="mt-6 space-y-4 text-[17px] leading-7 text-ink/80">
+              <p className="mt-4 text-sm text-ink/55">{project.tagline}</p>
+              <div className="mt-6 grid gap-5 text-[17px] leading-7 text-ink/80 md:grid-cols-2 md:gap-8 xl:grid-cols-1 xl:gap-5">
                 {project.summary.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-              <p className="mt-6 text-sm text-ink/55">{project.stack.join(", ")}</p>
+              <p className="mt-4 text-sm text-ink/55">{project.stack.join(", ")}</p>
             </div>
           </article>
         ))}
