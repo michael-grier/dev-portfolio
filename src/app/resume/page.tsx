@@ -15,7 +15,7 @@ const textLink =
 // The page and downloadable documents use the same resume content.
 export default function ResumePage() {
   return (
-    <PageShell title="Resume." intro="Read it here, or take a copy.">
+    <PageShell title="Resume.">
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:gap-16">
         <div>
           <p className="max-w-2xl text-pretty text-[19px] leading-8 text-ink/80">

@@ -18,7 +18,7 @@ export default function ContactPage() {
           <p className={bodyText}>{contactCopy.looking}</p>
         </Chapter>
 
-        <Chapter number="02" title="Where to find me">
+        <Chapter number="02" title="How to reach me">
           <ul className="space-y-3 text-[19px] leading-8">
             {contactLinks.map((link) => {
               const external = link.href.startsWith("http");
@@ -39,7 +39,7 @@ export default function ContactPage() {
           </ul>
         </Chapter>
 
-        <Chapter number="03" title="What to expect">
+        <Chapter number="03" title="What happens next">
           <p className={bodyText}>{contactCopy.expect}</p>
         </Chapter>
       </div>

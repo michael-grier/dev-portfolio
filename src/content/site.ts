@@ -110,7 +110,7 @@ export const featuredProjects: Project[] = [
     summary: [
       {
         label: 'Context',
-        body: "An e-commerce site for a small local skateboard brand with nobody on staff to manage it full-time, so correctness had to come from the design rather than from someone watching.",
+        body: "An e-commerce site for a small local skateboard brand with nobody on staff to manage it full-time. Correctness and reliability have to be built into the design rather than ensured by human oversight.",
       },
       {
         label: 'Checkout',
@@ -148,7 +148,7 @@ export const featuredProjects: Project[] = [
   },
   {
     title: 'YYC Skate Spots',
-    tagline: 'Street spot book for Calgary. iOS and Android.',
+    tagline: 'Street spot book for Calgary. iOS app (coming soon to Android).',
     repo: 'https://github.com/michael-grier/yyc-skate-spots',
     summary: [
       {
@@ -223,25 +223,25 @@ export const featuredProjects: Project[] = [
 // About page, in the order the chapters appear
 
 export const aboutIntro =
-  'Five years of energy software, a teaching degree before that, and a skate scene that keeps handing me things to build.';
+  'Five years building production web applications, a first career as an educator, and a lifetime in Calgary\'s skateboard scene.';
 
 export const aboutPhoto = {
   alt: 'Michael doing a back smith grind on a concrete ledge under a bridge in Calgary',
-  caption: 'Back smith, under a bridge somewhere in Calgary.',
+  caption: 'Back smith under the bridge in Sunnyside.',
 };
 
 export const aboutChapters = [
   {
     title: 'Work',
-    body: 'I\'m a full-stack developer in Calgary. I spent five years at TransAlta, most of it co-leading a Next.js reporting platform that wind, hydro, solar, and gas teams use to see how their plants are running. That work ran the whole stack: dashboards analysts could build themselves, a review workflow for the data catalogue, single sign-on, and the Terraform and GitHub Actions pipelines that carried each release to production.',
+    body: 'I\'m a full-stack developer in Calgary. I spent five years at TransAlta, most of it as one of two developers on a Next.js data visualization platform that the wind, hydro, solar, and gas teams use to monitor how their plants are running. I wrote the majority of the code and had a lot of latitude in how it was architected, working from requirements set by a senior engineer and our manager.',
   },
   {
     title: 'Before that',
-    body: 'Before software, I taught. A Bachelor of Education is an unusual way into this work, but it\'s where I learned to explain things plainly, notice when someone is lost, and design for the person who wasn\'t in the room when a decision was made. That shows up in how I write interfaces, error states, and documentation.',
+    body: 'Before software, I was a school teacher, teaching everything from early education to high school English. A Bachelor of Education is an unusual way into this work, but it\'s where I learned to explain things plainly, notice when someone is lost, and design for the person who wasn\'t in the room when a decision was made. That shows up in how I design user interfaces, write documentation, and handle error states.',
   },
   {
     title: 'Outside work',
-    body: 'Outside work I build for the skate scene I\'m part of: a storefront for a local board brand, a spot map for the city, and a training app for the interviews I was preparing for. They\'re small products with real users, and each one has to run without a team behind it. Most of the engineering went into making the design hold up when nobody is watching.',
+    body: 'Outside work I build for the communities that I\'m part of: a storefront for a local skateboard brand, a map for skaters to document and share skate spots, and a training app for TypeScript developers (like me). The storefront and the map are live, with real users and no team behind them, so most of the engineering went into making them dependable without relying on my constant oversight. The training app is a work in progress, with every lesson written and the runtime built.',
   },
 ];
 
@@ -249,7 +249,7 @@ export const aboutPrinciples = [
   {
     label: 'Correct by design',
     description:
-      'Stock reserved before a payment session exists, orders that appear only once the webhook confirms, review state a contributor cannot overwrite. When nobody is watching, the design has to do the watching.',
+      'Stock reserved before a payment session exists, orders that appear only once the webhook confirms, review state a contributor cannot overwrite. If it only works when someone is there to manage it, it doesn\'t work properly.',
   },
   {
     label: 'Sized to the problem',
@@ -264,22 +264,21 @@ export const aboutPrinciples = [
 ];
 
 export const workingStyle = [
-  'Clarify the user flow and success criteria before writing much code.',
+  'Clarify the user flow and success criteria before building.',
   'Build the smallest useful version, then tighten edge cases and interaction quality.',
   'Test at real boundaries: a real database for concurrency, a real browser for checkout, a verified config before release.',
   'Ship small, reviewable changes, with CI running the whole suite on every pull request.',
 ];
 
-// First draft, take another pass at it.
 export const aboutPersonal =
-  'I\'ve skated Calgary\'s streets and parks for most of my life, and I still get out most weeks. At home it\'s my wife and our kids, which is where the rest of the time goes.';
+  'I\'ve skated Calgary\'s streets and parks for most of my life, and I still get out most weeks. The rest of my time is spent with my wife and two young children, who continue to inspire me in everything I do.';
 
 // Contact page
 
 export const contactCopy = {
-  intro: 'Direct lines, no forms.',
+  intro: 'If something on this site resonates, I\'d love to hear from you.',
   looking:
-    "I'm looking for a frontend or full-stack developer role, in Calgary or remote, on a team that ships and cares about what it ships. I do my best work on a dedicated team, with a real product, and enough ownership to get the details right.",
+    "I'm looking for a frontend or full-stack developer role, in Calgary or remote, on a team that is motivated and passionate about the product that they are building, and about the people that they are building it with.",
   expect:
-    "Email is the fastest way to reach me and I reply within a day or two. If you're hiring, a link to the role and a line about the team is plenty to start. If you just want to talk shop, or you skate, that's welcome too.",
+    "Email is the fastest way to reach me, and I will strive to respond to every email within a day or two. If you're hiring and think I would be a good fit, please feel free to reach out. If you just want to talk shop (or catch a skate session), that would be awesome too!",
 };
