@@ -114,7 +114,7 @@ export const featuredProjects: Project[] = [
   },
   {
     title: 'Code Trainer',
-    tagline: 'Interview prep for full-stack TypeScript engineers, in the browser.',
+    tagline: 'Interview prep for full-stack TypeScript developers, in the browser.',
     repo: 'https://github.com/michael-grier/code-trainer',
     summary: [
       "60 lessons and over 240 problems across algorithms, runtime behaviour, the type system, React, backend TypeScript, and testing and production readiness.",
@@ -126,27 +126,54 @@ export const featuredProjects: Project[] = [
   },
 ];
 
+export const aboutIntro =
+  'Five years of energy software, a teaching degree before that, and a skate scene that keeps handing me things to build.';
+
+export const aboutPhoto = {
+  alt: 'Michael doing a back smith grind on a concrete ledge under a bridge in Calgary',
+  caption: 'Back smith, under a bridge somewhere in Calgary.',
+};
+
+export const aboutChapters = [
+  {
+    title: 'Work',
+    body: 'I\'m a full-stack developer in Calgary. I spent five years at TransAlta, most of it co-leading a Next.js reporting platform that wind, hydro, solar, and gas teams use to see how their plants are running. That work ran the whole stack: dashboards analysts could build themselves, a review workflow for the data catalogue, single sign-on, and the Terraform and GitHub Actions pipelines that carried each release to production.',
+  },
+  {
+    title: 'Before that',
+    body: 'Before software, I taught. A Bachelor of Education is an unusual way into this work, but it\'s where I learned to explain things plainly, notice when someone is lost, and design for the person who wasn\'t in the room when a decision was made. That shows up in how I write interfaces, error states, and documentation.',
+  },
+  {
+    title: 'Outside work',
+    body: 'Outside work I build for the skate scene I\'m part of: a storefront for a local board brand, a spot map for the city, and a training app for the interviews I was preparing for. They\'re small products with real users, and each one has to run without a team behind it. Most of the engineering went into making the design hold up when nobody is watching.',
+  },
+];
+
+// Placeholder until Michael writes this one.
+export const aboutPersonal =
+  'I\'ve skated Calgary\'s streets and parks for most of my life, and I still get out most weeks. At home it\'s my wife and our kids, which is where the rest of the time goes.';
+
 export const aboutPrinciples = [
   {
-    label: 'Product clarity',
+    label: 'Correct by design',
     description:
-      'Whether an interface helps someone make the next decision quickly, not just whether it looks finished.',
+      'Stock reserved before a payment session exists, orders that appear only once the webhook confirms, review state a contributor cannot overwrite. When nobody is watching, the design has to do the watching.',
   },
   {
-    label: 'Maintainable pace',
+    label: 'Sized to the problem',
     description:
-      'Small, verifiable changes with clear ownership over clever code that gets expensive to revisit.',
+      'A one-city map gets a client-side distance filter, not a geospatial service. The right amount of infrastructure is the least that keeps the product dependable.',
   },
   {
-    label: 'Practical polish',
+    label: 'Clear for the next person',
     description:
-      'Motion, spacing, copy, and state design matter when they make a product easier to trust.',
+      'Comments explain why, docs explain how to run it, and the interface explains what to do next. The next reader is usually me in six months.',
   },
 ];
 
 export const workingStyle = [
   'Clarify the user flow and success criteria before writing much code.',
   'Build the smallest useful version, then tighten edge cases and interaction quality.',
-  'Keep implementation visible through readable code, typed contracts, and focused verification.',
-  'Commit at meaningful checkpoints so the work stays reviewable.',
+  'Test at real boundaries: a real database for concurrency, a real browser for checkout, a verified config before release.',
+  'Ship small, reviewable changes, with CI running the whole suite on every pull request.',
 ];
