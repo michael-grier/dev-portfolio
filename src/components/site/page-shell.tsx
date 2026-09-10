@@ -8,10 +8,9 @@ type PageShellProps = {
   intro?: ReactNode;
   children: ReactNode;
   className?: string;
-  contentClassName?: string;
 };
 
-export function PageShell({ title, intro, children, className, contentClassName }: PageShellProps) {
+export function PageShell({ title, intro, children, className }: PageShellProps) {
   return (
     <section
       className={cn(
@@ -20,7 +19,7 @@ export function PageShell({ title, intro, children, className, contentClassName 
       )}
     >
       <PageLightfield />
-      <div className={cn("relative mx-auto w-full max-w-6xl", contentClassName)}>
+      <div className="relative mx-auto w-full max-w-6xl">
         <h1 className="max-w-3xl text-balance text-[clamp(2.4rem,5.5vw,4.5rem)] font-medium leading-[1] tracking-[-0.015em] text-ink">
           {title}
         </h1>
