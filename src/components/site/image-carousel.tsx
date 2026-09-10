@@ -40,8 +40,9 @@ export function ImageCarousel({ name, images }: ImageCarouselProps) {
   const first = images[0];
   if (!first) return null;
 
-  // Keep a stable stage while browsing. Contain preserves every screenshot;
-  // the height cap prevents portrait app screens from taking over the viewport.
+  // Keep a stable stage while browsing. Size each image to its own aspect ratio
+  // so rounded corners follow the screenshot even when it leaves empty space.
+  // The height cap prevents portrait app screens from taking over the viewport.
   const aspectRatio = first.src.width / first.src.height;
   const multiple = images.length > 1;
 
@@ -71,9 +72,8 @@ export function ImageCarousel({ name, images }: ImageCarouselProps) {
               <Image
                 src={image.src}
                 alt={image.alt}
-                fill
                 sizes="(min-width: 1600px) 895px, (min-width: 1280px) calc((100vw - 128px) * 1.55 / 2.55), (min-width: 640px) calc(100vw - 80px), calc(100vw - 40px)"
-                className="object-contain"
+                className="absolute inset-0 m-auto h-auto max-h-full w-auto max-w-full rounded-[8px]"
                 loading={index === 0 ? "eager" : "lazy"}
                 draggable={false}
               />

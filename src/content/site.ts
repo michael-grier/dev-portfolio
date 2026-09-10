@@ -5,6 +5,11 @@ import shop from '@/assets/projects/fuckers-hq/shop.webp';
 import cart from '@/assets/projects/fuckers-hq/cart.webp';
 import products from '@/assets/projects/fuckers-hq/products.webp';
 import editor from '@/assets/projects/fuckers-hq/editor.webp';
+import spotMap from '@/assets/projects/yyc-skate-spots/map.webp';
+import spotDetails from '@/assets/projects/yyc-skate-spots/spot-details.webp';
+import spotFilters from '@/assets/projects/yyc-skate-spots/filters.webp';
+import addSpot from '@/assets/projects/yyc-skate-spots/add-spot.webp';
+import pendingReview from '@/assets/projects/yyc-skate-spots/pending-review.webp';
 
 export type ProjectImage = {
   src: StaticImageData;
@@ -127,6 +132,13 @@ export const featuredProjects: Project[] = [
       'Cloudflare Pages',
     ],
     ink: 'pink',
+    images: [
+      { src: spotMap, alt: 'Calgary skate spot map with location pins, search, filters, and a selected spot preview.' },
+      { src: spotDetails, alt: 'Chinatown 12 Stair details with a spot photo, skating features, sharing, and directions.' },
+      { src: spotFilters, alt: 'Map filters for distance, spot type, and bust factor, showing 14 matching spots.' },
+      { src: addSpot, alt: 'Adding a skate spot by placing its location on the map after uploading photos.' },
+      { src: pendingReview, alt: 'The Bridge DIY spot submission with a photo and a waiting for review status.' },
+    ],
   },
   {
     title: 'Code Trainer',
