@@ -109,7 +109,7 @@ export function ImageCarousel({ name, images }: ImageCarouselProps) {
                     src={image.src}
                     alt={image.alt}
                     sizes="(min-width: 1152px) 360px, 33vw"
-                    className="h-auto max-h-full w-auto max-w-full min-w-0 rounded-[4px] border border-ink/10 object-contain"
+                    className="h-auto max-h-full w-auto max-w-full min-w-0 rounded-[12px] border border-ink/10 object-contain"
                     // The whole first slide is visible at once, so it all loads with the page.
                     loading={index === 0 ? "eager" : "lazy"}
                     draggable={false}
