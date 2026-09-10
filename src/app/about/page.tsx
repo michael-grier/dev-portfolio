@@ -34,7 +34,7 @@ export default function AboutPage() {
               sizes="(min-width: 1024px) 40vw, 100vw"
               loading="eager"
               placeholder="blur"
-              className="rounded-[8px] border border-ink/14"
+              className="rounded-sm border border-ink/14"
             />
             <figcaption className="mt-3 text-sm text-ink/55">{aboutPhoto.caption}</figcaption>
           </figure>
