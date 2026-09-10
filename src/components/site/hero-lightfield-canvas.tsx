@@ -22,6 +22,10 @@ type HeroLightfieldCanvasProps = {
   focal?: { x: number; y: number };
   // Play the burst flash on mount.
   intro?: boolean;
+  // Delay (ms) on the intro flash so a second plate can chase the first.
+  introDelay?: number;
+  // Offset (ms) on the focal drift so two plates float against each other.
+  driftPhase?: number;
   intensity?: number;
   // Multiplier on ray width.
   spread?: number;
@@ -50,12 +54,16 @@ type LightfieldLayer = {
   palette: LightfieldPalette;
   blend: GlobalCompositeOperation;
   spread: number;
+  // Elapsed time when the layer joined the composite, so it can fade in.
+  shownAt?: number;
 };
 
 type RenderOptions = {
   intensity: number;
   drift: number;
   intro: boolean;
+  introDelay: number;
+  driftPhase: number;
 };
 
 type LayerShell = {
@@ -128,7 +136,22 @@ const BURST_ANGLES = [
 
 const LIVE_RAY_INDEXES = [1, 3, 5, 7, 11, 13, 17, 21];
 const GLINT_RAY_INDEXES = [2, 6, 10, 14, 18, 22];
-const DETAIL_RAMP_START = 3400;
+// The intro flash as ink hitting paper: a quick attack, a short crest, and
+// a long release as it soaks in. Peak sits under 1 so the two plates never
+// multiply to a flat black.
+const FLASH_ATTACK_MS = 600;
+const FLASH_HOLD_MS = 600;
+const FLASH_RELEASE_MS = 1400;
+const FLASH_PEAK = 0.85;
+const DETAIL_RAMP_START = 2200;
+// Without the intro flash there is nothing to wait for, so detail fades in early.
+const AMBIENT_DETAIL_START = 300;
+const DETAIL_RAMP_MS = 1500;
+const LAYER_FADE_MS = 600;
+// Rotation wobble is an angle, so the pixel swing it causes grows with the
+// distance from the source. Scale it down past this diagonal so the far rays
+// move about the same amount on an ultrawide as on a laptop.
+const ROTATION_REFERENCE_DIAGONAL = 1700;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -159,17 +182,16 @@ function getRenderScale(width: number, height: number) {
   return clamp(Math.min(deviceRatio, pixelBudgetRatio), 0.72, MAX_PIXEL_RATIO);
 }
 
-function getIntroFlash(time: number) {
-  const reveal = easeOutCubic(clamp(time / 1500, 0, 1));
-  const decay = clamp(1 - time / 6200, 0, 1);
-  const primaryFlash = Math.exp(-Math.pow((time - 850) / 520, 2));
-  const secondaryFlash = Math.exp(-Math.pow((time - 2100) / 720, 2)) * 0.72;
-  const finalFlash = Math.exp(-Math.pow((time - 3600) / 1000, 2)) * 0.32;
+function easeInOutCubic(value: number) {
+  return value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
+}
 
-  return {
-    reveal,
-    flash: (primaryFlash + secondaryFlash + finalFlash) * decay,
-  };
+function getIntroFlash(time: number) {
+  const reveal = easeOutCubic(clamp(time / FLASH_ATTACK_MS, 0, 1));
+  const releaseStart = FLASH_ATTACK_MS + FLASH_HOLD_MS;
+  const release = easeInOutCubic(clamp((time - releaseStart) / FLASH_RELEASE_MS, 0, 1));
+
+  return { reveal, flash: reveal * (1 - release) * FLASH_PEAK };
 }
 
 function createLayerShell(
@@ -863,7 +885,7 @@ function drawLayer(
   context.globalCompositeOperation = operation;
   context.globalAlpha = clamp(alpha, 0, 1);
   context.translate(layer.focalX + offsetX, layer.focalY + offsetY);
-  context.rotate(rotation);
+  context.rotate(rotation * Math.min(1, ROTATION_REFERENCE_DIAGONAL / layer.diagonal));
   context.scale(scale, scale);
   context.translate(-layer.focalX, -layer.focalY);
   context.drawImage(layer.canvas, 0, 0, layer.width, layer.height);
@@ -883,12 +905,15 @@ function drawLightfield(
 ) {
   const sceneLayer = baseLayer ?? burstLayer;
   const { width, height, diagonal } = sceneLayer;
+  const driftTime = time + options.driftPhase;
   const driftX = reducedMotion
     ? 0
-    : (Math.sin(time * 0.000112) * 15 + Math.sin(time * 0.00024) * 4) * options.drift;
+    : (Math.sin(driftTime * 0.000112) * 15 + Math.sin(driftTime * 0.00024) * 4) *
+      options.drift;
   const driftY = reducedMotion
     ? 0
-    : (Math.cos(time * 0.00013) * 11 + Math.sin(time * 0.00019) * 3) * options.drift;
+    : (Math.cos(driftTime * 0.00013) * 11 + Math.sin(driftTime * 0.00019) * 3) *
+      options.drift;
   const focalX = sceneLayer.focalX + driftX;
   const focalY = sceneLayer.focalY + driftY;
   const pulse = reducedMotion
@@ -899,11 +924,14 @@ function drawLightfield(
     (reducedMotion ? 0.78 : 0.68 + layerBreath + Math.sin(time * 0.00108) * 0.08) *
     options.intensity;
   const motionRamp = reducedMotion ? 0 : easeOutCubic(clamp(time / 1700, 0, 1));
-  // Without the intro flash there is nothing to wait for, so detail fades in early.
-  const detailStart = options.intro ? DETAIL_RAMP_START : 300;
+  const detailStart = options.intro ? DETAIL_RAMP_START : AMBIENT_DETAIL_START;
   const detailRamp = reducedMotion
     ? 0
-    : easeOutCubic(clamp((time - detailStart) / 900, 0, 1));
+    : easeOutCubic(clamp((time - detailStart) / DETAIL_RAMP_MS, 0, 1));
+  const baseReveal =
+    reducedMotion || !baseLayer
+      ? 1
+      : easeOutCubic(clamp((time - (baseLayer.shownAt ?? 0)) / LAYER_FADE_MS, 0, 1));
   const sweepAlpha = reducedMotion
     ? 0
     : detailRamp *
@@ -925,7 +953,7 @@ function drawLightfield(
     drawLayer(
       context,
       baseLayer,
-      ambientAlpha,
+      ambientAlpha * baseReveal,
       driftX,
       driftY,
       reducedMotion ? 0 : Math.sin(time * 0.00018) * 0.028,
@@ -936,7 +964,7 @@ function drawLightfield(
       drawLayer(
         context,
         baseLayer,
-        contrastAlpha,
+        contrastAlpha * baseReveal,
         driftX,
         driftY,
         Math.sin(time * 0.0002 + 1.2) * -0.018,
@@ -983,16 +1011,17 @@ function drawLightfield(
     );
   }
 
+  // Dust is the paper's grain, so it stays put while the ink drifts over it.
   if (dustLayer) {
     drawLayer(
       context,
       dustLayer,
-      (reducedMotion ? 0.16 : detailRamp * (0.16 + Math.sin(time * 0.00088) * 0.04)) *
+      (reducedMotion ? 0.22 : detailRamp * (0.22 + Math.sin(time * 0.00088) * 0.04)) *
         options.intensity,
-      driftX * 1.26,
-      driftY * 1.4,
-      reducedMotion ? 0 : Math.sin(time * 0.00012) * 0.02,
-      reducedMotion ? 1 : 1.01 + Math.sin(time * 0.00018 + 2.1) * 0.018
+      0,
+      0,
+      0,
+      1
     );
   }
 
@@ -1002,18 +1031,15 @@ function drawLightfield(
   }
 
   if (!reducedMotion && options.intro) {
-    const { reveal, flash } = getIntroFlash(time);
+    const { reveal, flash } = getIntroFlash(time - options.introDelay);
 
-    const contentSafeFlash = flash * clamp(1 - (time - 1180) / 620, 0, 1);
-
-    if (contentSafeFlash > 0.012) {
-      const flashAlpha = clamp(contentSafeFlash * 1.4, 0, 1);
+    if (flash > 0.012) {
       const burstScale = 0.86 + reveal * 0.16 + flash * 0.07;
 
       drawLayer(
         context,
         burstLayer,
-        flashAlpha,
+        flash,
         driftX,
         driftY,
         Math.sin(time * 0.00055) * 0.018,
@@ -1032,6 +1058,8 @@ export function HeroLightfieldCanvas({
   blend = "screen",
   focal = { x: 0.52, y: 0.55 },
   intro = true,
+  introDelay = 0,
+  driftPhase = 0,
   intensity = 1,
   spread = 1,
   drift = 1,
@@ -1044,7 +1072,7 @@ export function HeroLightfieldCanvas({
 
   useEffect(() => {
     const style: LightfieldStyle = JSON.parse(styleKey);
-    const options: RenderOptions = { intensity, drift, intro };
+    const options: RenderOptions = { intensity, drift, intro, introDelay, driftPhase };
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -1068,8 +1096,14 @@ export function HeroLightfieldCanvas({
     let shadowLayerTimeout = 0;
     let dustLayerTimeout = 0;
     let layerGeneration = 0;
+    let skipFrame = false;
     const reducedMotion = Boolean(shouldReduceMotion);
     let startTime = performance.now();
+    // Once the ramps finish, every motion is a sine with a period of seconds
+    // or longer, so drawing every other frame is indistinguishable and halves
+    // the cost of an always-on canvas.
+    const idleStart =
+      (intro ? DETAIL_RAMP_START : AMBIENT_DETAIL_START) + DETAIL_RAMP_MS;
 
     const clearLayerTimeouts = () => {
       window.clearTimeout(baseLayerTimeout);
@@ -1184,9 +1218,10 @@ export function HeroLightfieldCanvas({
 
       // The intro's delays keep detail layers out of the flash; without it
       // they only need to stay behind the page's own entrance.
-      const delays = intro ? [220, 4200, 4450, 4700] : [60, 320, 420, 520];
+      const delays = intro ? [220, 2400, 2600, 2800] : [60, 320, 420, 520];
 
       baseLayerTimeout = scheduleLayer(delays[0], baseLayerSlices, (layer) => {
+        layer.shownAt = performance.now() - startTime;
         baseLayer = layer;
       });
       shadowLayerTimeout = scheduleLayer(delays[1], shadowLayerSlices, (layer) => {
@@ -1201,7 +1236,11 @@ export function HeroLightfieldCanvas({
     };
 
     const render = (time: number) => {
-      if (burstLayer) {
+      const elapsed = time - startTime;
+
+      skipFrame = elapsed > idleStart && !skipFrame;
+
+      if (burstLayer && !skipFrame) {
         drawLightfield(
           context,
           baseLayer,
@@ -1209,7 +1248,7 @@ export function HeroLightfieldCanvas({
           shadowLayer,
           dustLayer,
           burstLayer,
-          time - startTime,
+          elapsed,
           reducedMotion,
           options
         );
@@ -1234,7 +1273,7 @@ export function HeroLightfieldCanvas({
       clearLayerTimeouts();
       window.cancelAnimationFrame(animationFrame);
     };
-  }, [shouldReduceMotion, styleKey, intensity, drift, intro]);
+  }, [shouldReduceMotion, styleKey, intensity, drift, intro, introDelay, driftPhase]);
 
   return (
     <canvas
