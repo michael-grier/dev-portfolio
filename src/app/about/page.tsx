@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 
+import { Chapter } from "@/components/site/chapter";
 import { PageShell } from "@/components/site/page-shell";
 import {
   aboutChapters,
@@ -18,26 +18,6 @@ export const metadata = {
   description:
     "Background and working style of Michael Grier, a full-stack developer in Calgary.",
 };
-
-function Chapter({
-  number,
-  title,
-  children,
-}: {
-  number: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="grid gap-6 border-t border-ink/12 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-14">
-      <h2 className="text-lg font-medium">
-        <span className="mr-3 text-blue">{number}</span>
-        {title}
-      </h2>
-      <div className="max-w-xl">{children}</div>
-    </section>
-  );
-}
 
 const bodyText = "text-pretty text-[19px] leading-8 text-ink/80";
 

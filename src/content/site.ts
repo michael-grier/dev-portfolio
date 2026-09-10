@@ -67,6 +67,14 @@ export const contactLinks: ContactLink[] = [
   },
 ];
 
+export const contactCopy = {
+  intro: 'Direct lines, no forms.',
+  looking:
+    "I'm looking for a frontend or full-stack developer role, in Calgary or remote, on a team that ships and cares about what it ships. I do my best work on a dedicated team, with a real product, and enough ownership to get the details right.",
+  expect:
+    "Email is the fastest way to reach me and I reply within a day or two. If you're hiring, a link to the role and a line about the team is plenty to start. If you just want to talk shop, or you skate, that's welcome too.",
+};
+
 export const featuredProjects: Project[] = [
   {
     title: 'Fuckers Skateboards',
@@ -149,7 +157,7 @@ export const aboutChapters = [
   },
 ];
 
-// Placeholder until Michael writes this one.
+// PFirst draft, take another pass at it.
 export const aboutPersonal =
   'I\'ve skated Calgary\'s streets and parks for most of my life, and I still get out most weeks. At home it\'s my wife and our kids, which is where the rest of the time goes.';
 
