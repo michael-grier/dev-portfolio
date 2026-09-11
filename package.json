@@ -10,7 +10,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "check": "bun run lint && bun run typecheck"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
