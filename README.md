@@ -1,33 +1,41 @@
-# Developer Portfolio
+# michaelgrier.dev
 
-Greenfield developer portfolio site built with Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, and Bun.
-
-## Direction
-
-The visual system is based on local motion references in `hero.mp4`, `navigation.mp4`, and `video-analysis/`. Those files are design inputs only and are intentionally excluded from git.
-
-Planned pages:
-
-- Landing page with animated hero and frosted navigation
-- Resume page with PDF download
-- Projects page with media, descriptions, and links
-- About page
-- Contact page with direct links
-
-## Workflow
-
-This repository uses manual commit checkpoints. After each logical implementation phase, review the diff, commit locally, and push to GitHub manually.
-
-Initial planned checkpoints:
-
-1. Repository metadata and ignore rules
-2. Next.js, Bun, Tailwind, and shadcn/ui scaffold
-3. Theme, layout, navigation shell, and typed content model
-4. Hero canvas animation and frosted navigation interactions
-5. Resume, projects, about, and contact pages
-6. Responsive polish, accessibility, reduced motion, and build verification
+Developer portfolio built with Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, and Bun.
+Live at [michaelgrier.dev](https://michaelgrier.dev).
 
 ## Requirements
 
 - Bun 1.3 or newer
 - Node.js 20.9 or newer
+
+## Develop
+
+```sh
+bun install
+bun run dev
+```
+
+Site copy, navigation, projects, and contact links live in `src/content/site.ts`.
+The resume page reads `src/content/resume.json`; regenerating the PDF and Word
+downloads from it is covered in `scripts/README.md`.
+
+## Check
+
+```sh
+bun run check   # lint, typecheck, tests
+bun run build   # production build
+```
+
+`bun run test` runs the Vitest suite on its own. Tests cover the content
+invariants, the sitemap and robots output, and the navigation's active link.
+
+## Ship
+
+CI runs `check` and `build` on every pull request and on pushes to `main`.
+`main` is protected: the CI job must pass and the branch must be up to date
+before a merge.
+
+Vercel deploys `main` to production on every push through its GitHub
+integration. `vercel.json` skips builds for every other branch, so there are no
+preview deployments. The domain and its DNS are managed in Vercel, with
+`www.michaelgrier.dev` redirecting permanently to the apex.
