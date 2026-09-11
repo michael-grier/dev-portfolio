@@ -1,5 +1,5 @@
-import Image from "next/image";
-
+import { Chapter } from "@/components/site/chapter";
+import { ImageCarousel } from "@/components/site/image-carousel";
 import { PageShell } from "@/components/site/page-shell";
 import { featuredProjects, type Project } from "@/content/site";
 
@@ -16,62 +16,70 @@ const inkColors: Record<Project["ink"], string> = {
 };
 
 function ProjectMedia({ project }: { project: Project }) {
-  if (project.image) {
-    return (
-      <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-ink/14">
-        <Image
-          src={project.image.src}
-          alt={project.image.alt}
-          fill
-          sizes="(min-width: 1024px) 40vw, 100vw"
-          className="object-cover"
-        />
-      </div>
-    );
+  if (project.images?.length) {
+    return <ImageCarousel images={project.images} name={project.title} />;
   }
 
   return (
     <div
-      className="halftone aspect-[4/3] rounded-sm"
+      className="halftone aspect-video rounded-sm"
       style={{ "--dot": inkColors[project.ink] } as React.CSSProperties}
     />
   );
 }
 
+const rowText = "text-pretty text-[17px] leading-7 text-ink/80";
+
 export default function ProjectsPage() {
   return (
     <PageShell
       title="Things I've built."
-      intro="Two apps for the skate scene I'm part of, and a tool for the work itself. What each one had to get right, and what I built to do it."
+      intro="I love building things that help support the communities, pursuits, and people that matter to me. Here's some of the projects that I have been working on recently."
     >
-      <div className="divide-y divide-ink/12 border-y border-ink/12">
+      <div className="divide-y divide-ink/12 border-t border-ink/12">
         {featuredProjects.map((project) => (
-          <article
-            key={project.title}
-            className="grid gap-8 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14"
-          >
-            <ProjectMedia project={project} />
-            <div>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                <h2 className="text-3xl font-medium tracking-[-0.01em]">
+          <article key={project.title} className="py-16">
+            <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+              <div>
+                <h2 className="text-[2rem] font-medium tracking-[-0.01em] sm:text-4xl">
                   {project.title}
                 </h2>
-                <a
-                  href={project.repo}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
+                <p className="mt-2 text-lg text-ink/60">{project.tagline}</p>
+              </div>
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
+              >
+                {project.repo.replace("https://", "")}
+              </a>
+            </div>
+
+            <div className="mt-8">
+              <ProjectMedia project={project} />
+            </div>
+
+            <div className="mt-10 border-b border-ink/12">
+              {project.summary.map((row, index) => (
+                <Chapter
+                  key={row.label}
+                  number={String(index + 1).padStart(2, "0")}
+                  title={row.label}
+                  headingLevel="h3"
+                  className="gap-4 py-8"
                 >
-                  {project.repo.replace("https://", "")}
-                </a>
-              </div>
-              <p className="mt-2 text-sm text-ink/55">{project.tagline}</p>
-              <div className="mt-6 space-y-4 text-[17px] leading-7 text-ink/80">
-                {project.summary.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-              <p className="mt-6 text-sm text-ink/55">{project.stack.join(", ")}</p>
+                  <p className={rowText}>{row.body}</p>
+                </Chapter>
+              ))}
+              <Chapter
+                number={String(project.summary.length + 1).padStart(2, "0")}
+                title="Stack"
+                headingLevel="h3"
+                className="gap-4 py-8"
+              >
+                <p className={rowText}>{project.stack.join(", ")}</p>
+              </Chapter>
             </div>
           </article>
         ))}

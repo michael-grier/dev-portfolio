@@ -5,7 +5,7 @@
   "email": "michael.c.grier@gmail.com",
   "phone": "403-969-8220",
   "github": "https://github.com/michael-grier",
-  "summary": "I'm a full-stack developer with five years at TransAlta building energy reporting and management applications and automating business processes. I focus on simple, easy to use interfaces and clear communication, drawing on my background in education. My independent projects include a custom ecommerce site, a native mobile app, and an interactive learning platform for developers.",
+  "summary": "I'm a full-stack developer with five years of experience building reporting and management applications and automating business processes. I focus on simple, easy to use interfaces and clear communication, drawing on my background in education. My independent projects include a custom ecommerce site, a native mobile app, and an interactive learning platform for developers.",
   "experience": [
     {
       "title": "Software Developer",
@@ -17,7 +17,7 @@
           "name": "Athena",
           "description": "Production reporting and data governance application",
           "bullets": [
-            "Co-led development of a Next.js and TypeScript production reporting platform with real-time dashboards for wind, hydro, solar, and natural gas management teams and senior leadership.",
+            "Contributed the majority of code to a Next.js and TypeScript production reporting platform with real-time dashboards for wind, hydro, solar, and natural gas management teams and senior leadership.",
             "Enabled SQL-fluent analysts to create their own dashboards within the platform using reusable ECharts cards and chart presets.",
             "Built a data-catalog workflow with draft submissions, multi-stage review, rework, and audit trails.",
             "Implemented Microsoft Entra ID SSO, PostgreSQL-backed sessions, and distributed locking for token refresh across application instances.",
