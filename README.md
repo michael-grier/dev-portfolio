@@ -1,41 +1,33 @@
-# michaelgrier.dev
+# Michael Grier
 
-Developer portfolio built with Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, and Bun.
-Live at [michaelgrier.dev](https://michaelgrier.dev).
+Hi, I'm Michael, a software developer in Calgary. I build polished user
+interfaces and full-stack applications, with a focus on usability,
+performance, and maintainable architecture.
 
-## Requirements
+This is my portfolio, live at [michaelgrier.dev](https://michaelgrier.dev). It
+covers the work I've shipped, how I approach building things, my resume, and
+how to get in touch.
 
-- Bun 1.3 or newer
-- Node.js 20.9 or newer
+## Projects on the site
 
-## Develop
+- **Fuckers Skateboards**, a storefront for a local skateboard brand.
+- **YYC Skate Spots**, an iOS app for finding and sharing skate spots in
+  Calgary.
+- **Code Trainer**, browser-based interview prep for full-stack TypeScript
+  developers.
+
+## Under the hood
+
+Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, and Bun. Every page is
+prerendered as static content. Copy and project data live in
+`src/content/site.ts`, and the resume page and its downloads are generated from
+`src/content/resume.json`.
 
 ```sh
 bun install
-bun run dev
-```
-
-Site copy, navigation, projects, and contact links live in `src/content/site.ts`.
-The resume page reads `src/content/resume.json`; regenerating the PDF and Word
-downloads from it is covered in `scripts/README.md`.
-
-## Check
-
-```sh
+bun run dev     # local server
 bun run check   # lint, typecheck, tests
-bun run build   # production build
 ```
 
-`bun run test` runs the Vitest suite on its own. Tests cover the content
-invariants, the sitemap and robots output, and the navigation's active link.
-
-## Ship
-
-CI runs `check` and `build` on every pull request and on pushes to `main`.
-`main` is protected: the CI job must pass and the branch must be up to date
-before a merge.
-
-Vercel deploys `main` to production on every push through its GitHub
-integration. `vercel.json` skips builds for every other branch, so there are no
-preview deployments. The domain and its DNS are managed in Vercel, with
-`www.michaelgrier.dev` redirecting permanently to the apex.
+CI runs the checks and a production build on every pull request. Merges to
+`main` deploy to production on Vercel.
