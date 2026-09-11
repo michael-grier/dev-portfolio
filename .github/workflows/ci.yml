@@ -1,5 +1,9 @@
 name: CI
 
+# Nothing here pushes or comments, so the token only needs to read the repo.
+permissions:
+  contents: read
+
 on:
   pull_request:
   push:
@@ -14,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: oven-sh/setup-bun@v2
         with:

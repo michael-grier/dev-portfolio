@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import { SiteNavigation } from "./site-navigation";
 
-const usePathname = vi.fn<() => string>();
-vi.mock("next/navigation", () => ({ usePathname: () => usePathname() }));
+const { usePathname } = vi.hoisted(() => ({ usePathname: vi.fn<() => string>() }));
+vi.mock("next/navigation", () => ({ usePathname }));
 
 describe("SiteNavigation", () => {
   it("marks the current route and nothing else", () => {
