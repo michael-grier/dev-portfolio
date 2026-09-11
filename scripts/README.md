@@ -17,7 +17,9 @@ soffice --headless --convert-to 'pdf:writer_pdf_Export:{"UseTaggedPDF":{"type":"
 ```
 
 Close other LibreOffice windows before running the command so it starts a
-headless process. Check both pages for clipping, page breaks, working links, and
+headless process. If LibreOffice is installed as a snap, it cannot read files
+under hidden directories such as `~/.t3`, so convert from a visible folder and
+copy the PDF back. Check both pages for clipping, page breaks, working links, and
 readable text after exporting. The site build does not regenerate these files.
 
 The document embeds regular and bold instances of Familjen Grotesk, matching the

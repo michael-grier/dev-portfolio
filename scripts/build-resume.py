@@ -192,6 +192,8 @@ def build(output):
     profiles = doc.add_paragraph(style="Contact")
     profiles.add_run("GitHub: ")
     link(profiles, data["github"].removeprefix("https://"), data["github"])
+    profiles.add_run("  |  Website: ")
+    link(profiles, data["website"].removeprefix("https://"), data["website"])
     profiles.paragraph_format.space_after = Pt(12)
     doc.add_paragraph(data["summary"])
     heading(doc, "Experience")
