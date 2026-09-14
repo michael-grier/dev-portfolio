@@ -20,6 +20,7 @@
           "bullets": [
             "Contributed the majority of code to a Next.js and TypeScript production reporting platform with real-time dashboards for wind, hydro, solar, and natural gas management teams and senior leadership.",
             "Enabled SQL-fluent analysts to create their own dashboards within the platform using reusable ECharts cards and chart presets.",
+            "Used Databricks as the primary analytics datastore, with PostgreSQL supporting latency-sensitive features such as authentication and comments.",
             "Built a data-catalog workflow with draft submissions, multi-stage review, rework, and audit trails.",
             "Implemented Microsoft Entra ID SSO, PostgreSQL-backed sessions, and distributed locking for token refresh across application instances.",
             "Built Terraform and GitHub Actions delivery workflows across development, UAT, and production, including release promotion, hotfixes, and rollback.",
@@ -30,8 +31,8 @@
           "name": "GenOS",
           "description": "Wind, solar, hydro, and natural gas operations management application",
           "bullets": [
-            "Migrated event data from REST to GraphQL and replaced a 1,700-line shared React component with focused wind, solar, and hydro modules.",
-            "Built reusable mobile and tablet modals for event details and monitoring graphs; established Docker builds and Azure Pipelines across three environments.",
+            "Refactored legacy React components across the application into smaller, focused modules to improve maintainability. Migrated event data from REST to GraphQL.",
+            "Built comprehensive mobile and tablet views across the entire application, introducing responsive design where none existed before. Established Docker builds and Azure Pipelines across three environments.",
             "Fixed SQL Server connection leaks and strengthened JWT verification. Corrected capacity values, event filtering, and multi-unit CSV exports used in NERC reporting."
           ]
         }

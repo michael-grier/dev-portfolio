@@ -151,7 +151,7 @@ def build(output):
     section.different_first_page_header_footer = True
     normal = doc.styles["Normal"]
     set_font(normal, 10.5)
-    normal.paragraph_format.line_spacing = 1.04
+    normal.paragraph_format.line_spacing = 1
     normal.paragraph_format.space_after = Pt(4)
     normal.paragraph_format.widow_control = True
     for name, size, color, bold in [
@@ -168,6 +168,7 @@ def build(output):
         style.paragraph_format.space_after = Pt(5)
         style.paragraph_format.keep_with_next = name != "List Bullet"
     doc.styles["Heading 1"].paragraph_format.space_after = Pt(12)
+    doc.styles["Heading 3"].paragraph_format.space_before = Pt(6)
     for name, size in [("Contact", 9.5), ("Detail", 9.5), ("Folio", 8.5)]:
         style = doc.styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
         set_font(style, size, MUTED)
