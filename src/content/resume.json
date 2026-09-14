@@ -20,6 +20,7 @@
           "bullets": [
             "Contributed the majority of code to a Next.js and TypeScript production reporting platform with real-time dashboards for wind, hydro, solar, and natural gas management teams and senior leadership.",
             "Enabled SQL-fluent analysts to create their own dashboards within the platform using reusable ECharts cards and chart presets.",
+            "Used Databricks as the primary analytics datastore, with PostgreSQL supporting latency-sensitive features such as authentication and comments.",
             "Built a data-catalog workflow with draft submissions, multi-stage review, rework, and audit trails.",
             "Implemented Microsoft Entra ID SSO, PostgreSQL-backed sessions, and distributed locking for token refresh across application instances.",
             "Built Terraform and GitHub Actions delivery workflows across development, UAT, and production, including release promotion, hotfixes, and rollback.",
