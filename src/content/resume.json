@@ -6,7 +6,7 @@
   "phone": "403-969-8220",
   "github": "https://github.com/michael-grier",
   "website": "https://michaelgrier.dev",
-  "summary": "I'm a full-stack developer with five years of experience building reporting and management applications and automating business processes. I focus on simple, easy to use interfaces and clear communication, drawing on my background in education. My independent projects include a custom ecommerce site, a native mobile app, and an interactive learning platform for developers.",
+  "summary": "I'm a full-stack developer with five years of experience building reporting and management applications and automating business processes. I focus on clean interfaces, reliable architecture, and clear communication. My background in education shapes how I explain technical decisions and collaborate with others.",
   "experience": [
     {
       "title": "Software Developer",
@@ -21,10 +21,10 @@
             "Contributed the majority of code to a Next.js and TypeScript production reporting platform with real-time dashboards for wind, hydro, solar, and natural gas management teams and senior leadership.",
             "Enabled SQL-fluent analysts to create their own dashboards within the platform using reusable ECharts cards and chart presets.",
             "Used Databricks as the primary analytics datastore, with PostgreSQL supporting latency-sensitive features such as authentication and comments.",
-            "Built a data-catalog workflow with draft submissions, multi-stage review, rework, and audit trails.",
+            "Built a data catalog management workflow with draft submissions, multi-stage review, rework, and audit trails.",
             "Implemented Microsoft Entra ID SSO, PostgreSQL-backed sessions, and distributed locking for token refresh across application instances.",
             "Built Terraform and GitHub Actions delivery workflows across development, UAT, and production, including release promotion, hotfixes, and rollback.",
-            "Worked with management teams, analysts, and data engineers to define reporting requirements, plan tasks, and refine fuel-specific dashboards through user feedback."
+            "Worked with analysts and management teams to define reporting requirements and refine dashboards through user feedback."
           ]
         },
         {
@@ -37,7 +37,9 @@
           ]
         }
       ],
-      "bullets": []
+      "bullets": [
+        "Worked on a team of three software developers and three data engineers, sharing responsibility for architecture, UI design, development, testing, infrastructure, deployment, and maintenance."
+      ]
     },
     {
       "title": "Junior Automation Developer",

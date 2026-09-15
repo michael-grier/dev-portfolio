@@ -61,6 +61,11 @@ export default function ResumePage() {
                   <p className="mt-1 text-sm text-ink/65">
                     {role.organization}, {role.location}
                   </p>
+                  {role.bullets.map((bullet) => (
+                    <p key={bullet} className="mt-4 text-base leading-7 text-ink/80">
+                      {bullet}
+                    </p>
+                  ))}
                   {role.products.map((product) => (
                     <section key={product.name} className="mt-8">
                       <h4 className="text-xl font-medium">
@@ -75,11 +80,6 @@ export default function ResumePage() {
                         ))}
                       </ul>
                     </section>
-                  ))}
-                  {role.bullets.map((bullet) => (
-                    <p key={bullet} className="mt-4 text-base leading-7 text-ink/80">
-                      {bullet}
-                    </p>
                   ))}
                 </article>
               ))}
