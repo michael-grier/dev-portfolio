@@ -233,7 +233,7 @@ export const aboutPhoto = {
 export const aboutChapters = [
   {
     title: 'Work',
-    body: 'I\'m a full-stack developer in Calgary. I spent five years at TransAlta, most of it as one of two developers on a Next.js data visualization platform that the wind, hydro, solar, and gas teams use to monitor how their plants are running. I wrote the majority of the code and had a lot of latitude in how it was architected, working from requirements set by a senior engineer and our manager.',
+    body: 'I\'m a full-stack developer in Calgary. I spent five years at TransAlta, most of it as one of two developers on a Next.js data visualization platform that the wind, hydro, solar, and gas teams use to monitor how their plants are running. I wrote the majority of the code and had a lot of latitude in how it was architected, working from requirements set by a senior engineer and our manager. Our broader team of three software developers and three data engineers was responsible for the full software lifecycle. Delivering quality software with limited resources taught me to share knowledge, help wherever I was needed, and build strong working relationships with my teammates.',
   },
   {
     title: 'Before that',

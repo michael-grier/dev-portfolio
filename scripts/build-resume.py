@@ -138,7 +138,7 @@ def lightburst(paragraph, width):
 
 
 def build(output):
-    """Lay out a two-page resume with experience first and projects on page two."""
+    """Lay out a two-page resume with TransAlta first and earlier roles on page two."""
     data = json.loads((ROOT / "src/content/resume.json").read_text(encoding="utf-8"))
     doc = Document()
     section = doc.sections[0]
@@ -151,8 +151,8 @@ def build(output):
     section.different_first_page_header_footer = True
     normal = doc.styles["Normal"]
     set_font(normal, 10.5)
-    normal.paragraph_format.line_spacing = 1
-    normal.paragraph_format.space_after = Pt(4)
+    normal.paragraph_format.line_spacing = 1.04
+    normal.paragraph_format.space_after = Pt(2)
     normal.paragraph_format.widow_control = True
     for name, size, color, bold in [
         ("Title", 34, INK, True),
@@ -167,12 +167,12 @@ def build(output):
         style.paragraph_format.space_before = Pt(10 if name.startswith("Heading") else 0)
         style.paragraph_format.space_after = Pt(5)
         style.paragraph_format.keep_with_next = name != "List Bullet"
-    doc.styles["Heading 1"].paragraph_format.space_after = Pt(12)
-    doc.styles["Heading 3"].paragraph_format.space_before = Pt(6)
+    doc.styles["Heading 1"].paragraph_format.space_after = Pt(8)
+    doc.styles["Heading 3"].paragraph_format.space_before = Pt(4)
     for name, size in [("Contact", 9.5), ("Detail", 9.5), ("Folio", 8.5)]:
         style = doc.styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
         set_font(style, size, MUTED)
-        style.paragraph_format.space_after = Pt(4)
+        style.paragraph_format.space_after = Pt(2)
         style.paragraph_format.keep_with_next = True
     bullet_style = doc.styles["List Bullet"].paragraph_format
     bullet_style.left_indent = Inches(0.14)
@@ -195,14 +195,20 @@ def build(output):
     link(profiles, data["github"].removeprefix("https://"), data["github"])
     profiles.add_run("  |  Website: ")
     link(profiles, data["website"].removeprefix("https://"), data["website"])
-    profiles.paragraph_format.space_after = Pt(12)
+    profiles.paragraph_format.space_after = Pt(6)
     doc.add_paragraph(data["summary"])
     heading(doc, "Experience")
     for role in data["experience"]:
+        # Keep the longer TransAlta tenure together; earlier roles share page two with projects.
+        if role["title"] == "Freelance Software Developer":
+            earlier_heading = heading(doc, "Earlier experience")
+            earlier_heading.paragraph_format.page_break_before = True
         role_heading = doc.add_paragraph(role["title"], "Heading 2")
         role_heading.paragraph_format.space_before = Pt(4)
         role_heading.paragraph_format.space_after = Pt(2)
         doc.add_paragraph(f'{role["organization"]}, {role["location"]}  |  {role["period"]}', "Detail")
+        for bullet in role["bullets"]:
+            doc.add_paragraph(bullet)
         for product in role["products"]:
             paragraph = doc.add_paragraph(style="Heading 3")
             paragraph.add_run(f'Project: {product["name"]}')
@@ -211,21 +217,21 @@ def build(output):
             detail.font.size = Pt(9.5)
             detail.font.color.rgb = RGBColor.from_string(MUTED)
             for bullet in product["bullets"]:
-                doc.add_paragraph(bullet, "List Bullet")
-        for bullet in role["bullets"]:
-            doc.add_paragraph(bullet)
+                item = doc.add_paragraph(bullet, "List Bullet")
+                # Word's list style suppresses spacing between adjacent bullets by default.
+                spacing = OxmlElement("w:contextualSpacing")
+                spacing.set(qn("w:val"), "0")
+                item._p.get_or_add_pPr().append(spacing)
 
-    # A deliberate page boundary keeps the professional and independent work distinct.
-    projects_heading = heading(doc, "Selected projects")
-    projects_heading.paragraph_format.page_break_before = True
+    heading(doc, "Selected projects")
     doc.add_paragraph("Independent development", "Detail")
     for project in data["projects"]:
         paragraph = doc.add_paragraph(style="Heading 2")
-        paragraph.paragraph_format.space_before = Pt(12)
+        paragraph.paragraph_format.space_before = Pt(8)
         paragraph.paragraph_format.space_after = Pt(2)
         link(paragraph, project["name"], project["href"])
         detail = doc.add_paragraph(project["description"], "Detail")
-        detail.paragraph_format.space_after = Pt(7)
+        detail.paragraph_format.space_after = Pt(3)
         doc.add_paragraph(project["bullet"])
         doc.add_paragraph(project["stack"], "Detail")
     heading(doc, "Technical skills")
@@ -233,13 +239,13 @@ def build(output):
         paragraph = doc.add_paragraph()
         paragraph.add_run(group["label"] + ": ").bold = True
         paragraph.add_run(", ".join(group["items"]))
-        paragraph.paragraph_format.space_after = Pt(7)
+        paragraph.paragraph_format.space_after = Pt(4)
     heading(doc, "Education")
     for education in data["education"]:
         paragraph = doc.add_paragraph()
         paragraph.add_run(education["qualification"]).bold = True
-        paragraph.add_run("\n" + education["institution"] + "  |  " + education["detail"])
-        paragraph.paragraph_format.space_after = Pt(8)
+        paragraph.add_run("  |  " + education["institution"] + "  |  " + education["detail"])
+        paragraph.paragraph_format.space_after = Pt(4)
         paragraph.paragraph_format.keep_together = True
 
     header = section.header.paragraphs[0]
