@@ -31,7 +31,7 @@
           "name": "GenOS",
           "description": "Wind, solar, hydro, and natural gas operations management application",
           "bullets": [
-            "Refactored legacy React components across the application into smaller, focused modules to improve maintainability. Migrated event data from REST to GraphQL.",
+            "Refactored legacy React components across the application into smaller, focused modules to improve maintainability. Converted a hybrid REST/GraphQL architecture to pure GraphQL.",
             "Built comprehensive mobile and tablet views across the entire application, introducing responsive design where none existed before. Established Docker builds and Azure Pipelines across three environments.",
             "Fixed SQL Server connection leaks and strengthened JWT verification. Corrected capacity values, event filtering, and multi-unit CSV exports used in NERC reporting."
           ]
