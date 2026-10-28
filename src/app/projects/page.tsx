@@ -29,6 +29,8 @@ function ProjectMedia({ project }: { project: Project }) {
 }
 
 const rowText = "text-pretty text-[17px] leading-7 text-ink/80";
+const linkClass =
+  "text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue";
 
 export default function ProjectsPage() {
   return (
@@ -46,14 +48,24 @@ export default function ProjectsPage() {
                 </h2>
                 <p className="mt-2 text-lg text-ink/60">{project.tagline}</p>
               </div>
-              <a
-                href={project.repo}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="text-sm text-blue underline decoration-blue/30 underline-offset-4 outline-none hover:decoration-blue focus-visible:ring-2 focus-visible:ring-blue"
-              >
-                {project.repo.replace("https://", "")}
-              </a>
+              <div className="flex flex-col gap-1.5 sm:items-end">
+                <a
+                  href={project.live.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className={linkClass}
+                >
+                  {project.live.label}
+                </a>
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className={linkClass}
+                >
+                  {project.repo.replace("https://", "")}
+                </a>
+              </div>
             </div>
 
             <div className="mt-8">
