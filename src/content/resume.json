@@ -85,7 +85,7 @@
       "description": "Community skateboarding map for Calgary",
       "href": "https://github.com/michael-grier/yyc-skate-spots",
       "stack": "React Native, Expo, Convex, Clerk, Google Maps, EAS",
-      "bullet": "Built a mobile spot book with map clustering, location filters, photo submissions, favourites, and moderation. Added share links with a web fallback and prepared the iOS release configuration and store submission."
+      "bullet": "Built and released a mobile spot book on the App Store, with map clustering, location filters, photo submissions, favourites, moderation, and share links with a web fallback."
     },
     {
       "name": "Code Trainer",

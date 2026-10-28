@@ -11,8 +11,8 @@ how to get in touch.
 ## Projects on the site
 
 - **Fuckers Skateboards**, a storefront for a local skateboard brand.
-- **YYC Skate Spots**, an iOS app for finding and sharing skate spots in
-  Calgary.
+- **YYC Skate Spots**, an iOS app on the App Store for finding and sharing
+  skate spots in Calgary.
 - **Code Trainer**, browser-based interview prep for full-stack TypeScript
   developers.
 

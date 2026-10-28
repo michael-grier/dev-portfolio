@@ -37,6 +37,8 @@ export type Project = {
   title: string;
   // One line under the title: what it is and the headline stack.
   tagline: string;
+  // Where people can use it: the live site or store listing.
+  live: { label: string; href: string };
   repo: string;
   // Each entry is one labelled row of the case study, in reading order.
   summary: { label: string; body: string }[];
@@ -106,6 +108,7 @@ export const featuredProjects: Project[] = [
   {
     title: 'Fuckers Skateboards',
     tagline: 'Storefront for a local, independent skateboard brand. Next.js, Postgres, Stripe.',
+    live: { label: 'fuckersskateboards.com', href: 'https://fuckersskateboards.com' },
     repo: 'https://github.com/michael-grier/fuckers-hq',
     summary: [
       {
@@ -148,7 +151,8 @@ export const featuredProjects: Project[] = [
   },
   {
     title: 'YYC Skate Spots',
-    tagline: 'Street spot book for Calgary. iOS app (coming soon to Android).',
+    tagline: 'Street spot book for Calgary. On the App Store, with Android coming soon.',
+    live: { label: 'App Store', href: 'https://apps.apple.com/ca/app/yyc-skate-spots/id6807476193' },
     repo: 'https://github.com/michael-grier/yyc-skate-spots',
     summary: [
       {
@@ -192,6 +196,7 @@ export const featuredProjects: Project[] = [
   {
     title: 'Code Trainer',
     tagline: 'Interview prep for full-stack TypeScript developers, in the browser.',
+    live: { label: 'code-trainer-one.vercel.app', href: 'https://code-trainer-one.vercel.app' },
     repo: 'https://github.com/michael-grier/code-trainer',
     summary: [
       {
